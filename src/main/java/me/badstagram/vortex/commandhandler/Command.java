@@ -127,8 +127,8 @@ public abstract class Command {
         try {
             this.execute(ctx);
             new CommandExecutedEvent(ctx.getJDA(), this, ctx);
-//            new CooldownManager(ctx.getGuild().getId(), ctx.getAuthor().getId(), ctx.getEvent(), this)
-//                    .putCooldown();
+            new CooldownManager(ctx.getGuild().getId(), ctx.getAuthor().getId(), ctx.getEvent(), this)
+                    .putCooldown();
 
 
         } catch (CommandExecutionException e) {
