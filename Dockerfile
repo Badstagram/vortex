@@ -1,4 +1,4 @@
-FROM openjdk:16-jdk-alpine3.12
+FROM openjdk:15-jdk-alpine3.12
 
 WORKDIR /usr/vortex
 

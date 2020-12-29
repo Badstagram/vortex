@@ -45,7 +45,7 @@ public class BotInfo extends Command {
                                 .map(Map.Entry::getKey)
                                 .collect(Collectors.joining());
 
-                        var mostUsedName = Objects.requireNonNull(client.getCommand(mostUsedCommandKey)).getName();
+                        var mostUsedName = client.getCommand(mostUsedCommandKey).getName();
 
                         var embed = EmbedUtil.createDefault()
                                 .setTitle("Bot Info")
