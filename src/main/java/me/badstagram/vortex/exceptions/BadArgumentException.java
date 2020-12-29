@@ -18,10 +18,20 @@ public class BadArgumentException extends Exception {
      */
     public BadArgumentException(String argument, boolean isMissing) {
         super();
-
         this.argument = argument;
         this.isMissing = isMissing;
+    }
 
+    /**
+     * Thrown when a command argument is invalid or missing
+     *
+     * @param argument
+     *         The argument that's missing
+     */
+    public BadArgumentException(String argument) {
+        super();
+        this.argument = argument;
+        this.isMissing = true;
     }
 
     public boolean isMissing() {

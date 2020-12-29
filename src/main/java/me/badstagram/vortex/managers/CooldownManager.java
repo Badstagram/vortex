@@ -64,7 +64,7 @@ public class CooldownManager {
 
             ps.setString(1, this.guildId);
             ps.setString(2, this.userId);
-            ps.setString(3, cmd.getName());
+            ps.setString(3, this.cmd.getName());
             ps.setString(4, String.valueOf(endTime));
 
             ps.execute();
