@@ -16,8 +16,11 @@ public class MiscUtil {
     }
 
     public static String postToHasteBin(String text) throws IOException {
+        
+        static final BASE_URL = "https://hastebin.de/"
+        
         var client = Vortex.getHttpClient();
-        var url = new URL("https://hastebin.com/documents");
+        var url = new URL(BASE_URL + "documents");
 
         var request = new Request.Builder()
                 .url(url)
@@ -30,6 +33,6 @@ public class MiscUtil {
 
         var data = DataObject.fromJson(response.body().string());
 
-        return "https://hastebin.com/%s".formatted(data.getString("key"));
+        return BASE_URL + data.getString("key")
     }
 }
