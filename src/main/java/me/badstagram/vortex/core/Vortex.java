@@ -13,19 +13,17 @@ import me.badstagram.vortex.commandhandler.CommandClientBuilder;
 import me.badstagram.vortex.commands.admin.*;
 import me.badstagram.vortex.commands.config.ConfigCommand;
 import me.badstagram.vortex.commands.economy.*;
+import me.badstagram.vortex.commands.emote.Emote;
 import me.badstagram.vortex.commands.filter.Filter;
-import me.badstagram.vortex.commands.fun.Avatar;
-import me.badstagram.vortex.commands.fun.Define;
-import me.badstagram.vortex.commands.fun.EightBall;
-import me.badstagram.vortex.commands.fun.ProgressBar;
+import me.badstagram.vortex.commands.fun.*;
 import me.badstagram.vortex.commands.globalbans.GBan;
 import me.badstagram.vortex.commands.info.*;
 import me.badstagram.vortex.commands.moderation.*;
+import me.badstagram.vortex.commands.morse.Morse;
+import me.badstagram.vortex.commands.reminders.Remind;
 import me.badstagram.vortex.commands.status.Status;
-import me.badstagram.vortex.listeners.BulkMessageDeleteListener;
-import me.badstagram.vortex.listeners.MessageEditListener;
-import me.badstagram.vortex.listeners.MessageListener;
-import me.badstagram.vortex.listeners.OnReadyListener;
+import me.badstagram.vortex.commands.tag.Tag;
+import me.badstagram.vortex.listeners.*;
 import me.badstagram.vortex.util.ErrorHandler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -36,12 +34,13 @@ import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.explodingbush.ksoftapi.KSoftAPI;
 import okhttp3.OkHttpClient;
-import org.postgresql.Driver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 public class Vortex {
     private static final boolean devMode = true;
@@ -54,6 +53,7 @@ public class Vortex {
     private static Random rnd;
     private static MongoClient mongo = null;
     private static CommandClient commandClient = null;
+    private static Scheduler scheduler;
 
 
     public static void main(String[] args) {
@@ -61,7 +61,7 @@ public class Vortex {
         Sentry.init(options -> options.setDsn(Config.get("sentry")));
 
         try {
-            jda = login(System.getenv("VORTEX_TOKEN"));
+            jda = login(Config.get("token"));
             commandClient = new CommandClientBuilder()
                     .setPrefix(Constants.PREFIX)
                     .setOwnerId("424239181296959507")
@@ -71,7 +71,7 @@ public class Vortex {
                     .addCommand(new ProgressBar())
                     .addCommand(new SyncDatabase())
                     .addCommand(new GBan())
-                    .addCommand(new Eval())
+                    .addCommand(new AdminEval())
                     .addCommand(new InviteLookup())
                     .addCommand(new EightBall())
                     .addCommand(new Avatar())
@@ -94,12 +94,32 @@ public class Vortex {
                     .addCommand(new Filter())
                     .addCommand(new Pay())
                     .addCommand(new Rep())
+                    .addCommand(new CheckBan())
+                    .addCommand(new Bonk())
+                    .addCommand(new SafeEval())
+                    .addCommand(new Tag())
+                    .addCommand(new CategorySync())
+                    .addCommand(new Server())
+                    .addCommand(new Inspire())
+                    .addCommand(new Morse())
+                    .addCommand(new UnLoad())
+                    .addCommand(new Load())
+                    .addCommand(new AsciiArt())
+                    .addCommand(new Emote())
+                    .addCommand(new OCR())
+                    .addCommand(new Dog())
+                    .addCommand(new E())
+                    .addCommand(new Rule34())
+                    .addCommand(new ReverseAvatar())
+                    .addCommand(new Weather())
+                    .addCommand(new ScheduleTest())
+                    .addCommand(new TempBan())
+                    .addCommand(new Remind())
                     .build();
 
             jda.addEventListener(commandClient);
 
         } catch (Exception e) {
-            e.printStackTrace();
             ErrorHandler.handle(e);
             log.error("There was an error and Vortex was unable to start up!", e);
             System.exit(-1);
@@ -109,7 +129,7 @@ public class Vortex {
 
     protected static JDA login(@Nonnull String token) throws Exception {
         return JDABuilder.createDefault(token)
-                .disableCache(CacheFlag.ACTIVITY)
+                .enableCache(CacheFlag.ACTIVITY)
                 .enableCache(CacheFlag.VOICE_STATE)
                 .enableCache(CacheFlag.CLIENT_STATUS)
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
@@ -122,8 +142,15 @@ public class Vortex {
                         new OnReadyListener(),
                         new MessageListener(),
                         new MessageEditListener(),
-                        new BulkMessageDeleteListener())
+                        new BulkMessageDeleteListener(),
+                        new GuildMemberJoinListener(),
+                        new OnGuildReady(),
+                        new OnGuildUnavailable(),
+                        new OnGuildAvailable(),
+                        new OnUserAvatarUpdate(),
+                        new OnMessageDelete())
                 .setBulkDeleteSplittingEnabled(false)
+                .setRawEventsEnabled(true)
                 .build()
                 .awaitReady();
 
@@ -142,7 +169,7 @@ public class Vortex {
 
     public static KSoftAPI getKSoftAPI() {
         if (kSoftAPI == null) {
-            kSoftAPI = new KSoftAPI(System.getenv("KSOFT_TOKEN"));
+            kSoftAPI = new KSoftAPI(Config.get("ksoft"));
         }
         return kSoftAPI;
     }
@@ -189,5 +216,12 @@ public class Vortex {
 
     public static CommandClient getCommandClient() {
         return commandClient;
+    }
+
+    public static Scheduler getScheduler() {
+        if (scheduler == null)
+            scheduler = new Scheduler(Executors.newSingleThreadScheduledExecutor());
+
+        return scheduler;
     }
 }
