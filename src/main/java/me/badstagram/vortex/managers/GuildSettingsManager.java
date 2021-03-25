@@ -1,38 +1,36 @@
 package me.badstagram.vortex.managers;
 
-import groovy.io.EncodingAwareBufferedWriter;
+import com.github.benmanes.caffeine.cache.CacheLoader;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
+import com.google.common.cache.CacheBuilder;
 import me.badstagram.vortex.automod.AutoModPunishmentType;
-import me.badstagram.vortex.entities.GuildPunishmentType;
+import me.badstagram.vortex.commandhandler.context.CommandContext;
 import me.badstagram.vortex.util.DatabaseUtils;
 import me.badstagram.vortex.util.ErrorHandler;
-import net.dv8tion.jda.api.utils.MiscUtil;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Invite;
 import net.dv8tion.jda.internal.utils.Checks;
-import net.dv8tion.jda.internal.utils.Helpers;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import javax.annotation.Nonnull;
+import java.util.concurrent.TimeUnit;
 
 public class GuildSettingsManager {
     private final String guildId;
+
 
     public GuildSettingsManager(String guildId) {
         this.guildId = guildId;
     }
 
-    /**
-     * Sets the action taken when a user posts an invite link.
-     *
-     * @param type
-     *         The Punishment Type.
-     *
-     * @throws Exception
-     *         If an Exception happens while updating the Database
-     * @author Badstagram
-     */
-    public void setAdvertiseAction(@Nonnull AutoModPunishmentType type) throws Exception {
+    public GuildSettingsManager(Guild guild) {
+        this.guildId = guild.getId();
+    }
 
-        if (type == AutoModPunishmentType.UNKNOWN) throw new IllegalArgumentException("type can't be UNKNOWN");
-
-        DatabaseUtils.execute("UPDATE guild_config SET anti_invite_action = ? WHERE guild_id = ?", this.guildId, type.getName());
+    public GuildSettingsManager(CommandContext ctx) {
+        this.guildId = ctx.getGuild().getId();
     }
 
     /**
@@ -42,6 +40,7 @@ public class GuildSettingsManager {
      */
     public boolean isAntiAdvertiseEnabled() {
         try {
+
             var result = DatabaseUtils.executeQuery("SELECT anti_invite_enabled FROM guild_config WHERE guild_id = ?", this.guildId);
 
             return (Boolean) result.get("anti_invite_enabled");
@@ -53,12 +52,6 @@ public class GuildSettingsManager {
         }
     }
 
-
-
-    public AutoModPunishmentType getAdvertiseAction() {
-        return AutoModPunishmentType.IGNORE;
-    }
-
     public void setAntiAdvertiseEnabled(boolean enable) {
         try {
             DatabaseUtils.execute("UPDATE guild_config SET anti_invite_enabled = ? WHERE guild_id = ?", enable, this.guildId);
@@ -67,8 +60,37 @@ public class GuildSettingsManager {
         }
     }
 
-    public void setModLogChannel(String channelId) {
+    public AutoModPunishmentType getAdvertiseAction() {
+        return AutoModPunishmentType.IGNORE;
+    }
 
+    /**
+     * Sets the action taken when a user posts an invite link.
+     *
+     * @param type The Punishment Type.
+     * @throws Exception If an Exception happens while updating the Database
+     * @author Badstagram
+     */
+    public void setAdvertiseAction(@Nonnull AutoModPunishmentType type) throws Exception {
+
+        if (type == AutoModPunishmentType.UNKNOWN) throw new IllegalArgumentException("type can't be UNKNOWN");
+
+        DatabaseUtils.execute("UPDATE guild_config SET anti_invite_action = ? WHERE guild_id = ?", this.guildId, type.getName());
+    }
+
+    public String getModLogChannel() {
+
+        try {
+            return (String) DatabaseUtils.executeQuery("SELECT mod_log FROM guild_config WHERE guild_id = ?", this.guildId)
+                    .get("mod_log");
+
+        } catch (Exception e) {
+            ErrorHandler.handle(e);
+        }
+        return "";
+    }
+
+    public void setModLogChannel(String channelId) {
         try {
             Checks.isSnowflake(channelId, "Channel ID");
 
@@ -78,15 +100,48 @@ public class GuildSettingsManager {
         }
     }
 
-    public String getModLogChannel() {
+    public void setDeCancerEnabled(boolean enabled) {
+        try {
+
+            DatabaseUtils.execute("UPDATE guild_config SET decancer_enabled = ? WHERE guild_id = ?", enabled, this.guildId);
+        } catch (Exception e) {
+            ErrorHandler.handle(e);
+        }
+    }
+
+    public boolean isDeCancerEnabled() {
+        try {
+
+            var result = DatabaseUtils.executeQuery("SELECT decancer_enabled FROM guild_config WHERE guild_id = ?", this.guildId);
+
+            return (Boolean) result.get("decancer_enabled");
+
+
+        } catch (Exception e) {
+            ErrorHandler.handle(e);
+            return true;
+        }
+    }
+
+    public String getPunishLogChannel() {
 
         try {
             return (String) DatabaseUtils.executeQuery("SELECT mod_log FROM guild_config WHERE guild_id = ?", this.guildId)
-            .get("mod_log");
+                    .get("mod_log");
 
         } catch (Exception e) {
             ErrorHandler.handle(e);
         }
         return "";
+    }
+
+    public void setPunishLogChannel(String channelId) {
+        try {
+            Checks.isSnowflake(channelId, "Channel ID");
+
+            DatabaseUtils.execute("UPDATE guild_config SET mod_log = ? WHERE guild_id = ?", channelId, this.guildId);
+        } catch (Exception e) {
+            ErrorHandler.handle(e);
+        }
     }
 }

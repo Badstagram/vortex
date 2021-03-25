@@ -14,6 +14,12 @@
     </properties>
 
     <repositories>
+
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+
         <repository>
             <snapshots>
                 <enabled>false</enabled>
@@ -22,7 +28,6 @@
             <name>jcenter-bintray</name>
             <url>https://jcenter.bintray.com</url>
         </repository>
-
     </repositories>
 
 
@@ -89,6 +94,18 @@
         </dependency>
 
         <dependency>
+            <groupId>com.jagrosh</groupId>
+            <artifactId>jda-utilities-commons</artifactId>
+            <version>3.0.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jagrosh</groupId>
+            <artifactId>jda-utilities-menu</artifactId>
+            <version>3.0.5</version>
+        </dependency>
+
+        <dependency>
             <groupId>io.sentry</groupId>
             <artifactId>sentry</artifactId>
             <version>3.1.0</version>
@@ -107,9 +124,22 @@
         </dependency>
 
         <dependency>
-            <groupId>net.dv8tion</groupId>
+            <groupId>com.github.caneleex</groupId>
             <artifactId>JDA</artifactId>
-            <version>4.2.0_223</version>
+            <version>f18c144338</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>2.8.8</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.8</version>
         </dependency>
 
     </dependencies>

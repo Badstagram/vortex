@@ -1,5 +1,7 @@
 package me.badstagram.vortex.entities;
 
+import me.badstagram.vortex.entities.enums.GuildPunishmentType;
+
 import javax.annotation.Nullable;
 
 public class GuildPunishment {

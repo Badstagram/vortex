@@ -4,14 +4,12 @@ import me.badstagram.vortex.commandhandler.Command;
 import me.badstagram.vortex.commandhandler.context.CommandContext;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
+import me.badstagram.vortex.util.ArgumentParser;
 import me.badstagram.vortex.util.EmbedUtil;
 import me.badstagram.vortex.util.FormatUtil;
-import me.badstagram.vortex.util.ArgumentParser;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.utils.MarkdownUtil;
 import net.explodingbush.ksoftapi.entities.Ban;
 
@@ -41,7 +39,8 @@ public class UserInfo extends Command {
             Member member;
             List<User> parsedUsers;
 
-            if (ctx.getArgs().isEmpty()) {
+            if (ctx.getArgs()
+                    .isEmpty()) {
                 member = ctx.getMember();
                 user = member.getUser();
             } else {
@@ -51,7 +50,8 @@ public class UserInfo extends Command {
                 parsedUsers = parser.parseUser();
 
                 user = parsedUsers.isEmpty() ? ctx.getAuthor() : parsedUsers.get(0);
-                member = ctx.getGuild().getMember(user);
+                member = ctx.getGuild()
+                        .getMember(user);
             }
 
 
@@ -70,18 +70,26 @@ public class UserInfo extends Command {
         var flagStr = ArgumentParser.parseUserFlags(user);
         var now = OffsetDateTime.now();
 
-        var secondsUserCreated = user.getTimeCreated().until(now, ChronoUnit.SECONDS);
+        if (user.getIdLong() == 82198898843586560L) {
+            flagStr += " <:night:766617791817318410>";
+        }
 
-        var ban = this.getBanInfo(user.getId());
+
+        var secondsUserCreated = user.getTimeCreated()
+                .until(now, ChronoUnit.SECONDS);
+
+        var ban = this.getKsoftBanInfo(user.getId());
         return EmbedUtil.createDefault()
                 .setAuthor(user.getAsTag(), null, user.getEffectiveAvatarUrl())
                 .setDescription(flagStr)
                 .addField("User ID", user.getId(), false)
-                .addField("Time Account Created", String.format("%s (%sago)", user.getTimeCreated().format(this.dtf), FormatUtil.secondsToTimeCompact(secondsUserCreated)), false)
+                .addField("Time Account Created", String.format("%s (%sago)", user.getTimeCreated()
+                        .format(this.dtf), FormatUtil.secondsToTimeCompact(secondsUserCreated)), false)
                 .addField("Global Banned", """
                             Vortex: Soon:tm:
                             KSoft.Si: %s
-                        """.formatted(ban.exists() ? MarkdownUtil.maskedLink("Yes for %s".formatted(ban.getReason()), ban.getProof()) : "No"), true)
+                        """.formatted(ban.exists() ? MarkdownUtil.maskedLink("Yes for %s".formatted(ban.getReason()), ban
+                        .getProof()) : "No"), true)
                 .build();
     }
 
@@ -90,9 +98,25 @@ public class UserInfo extends Command {
         var flagStr = ArgumentParser.parseUserFlags(user);
         var now = OffsetDateTime.now();
 
+        var activeOn = member.getActiveClients()
+                .stream()
+                .map(ClientType::getKey)
+                .map(FormatUtil::capitlise)
+                .collect(Collectors.joining(", "));
+
+
+        if (user.getIdLong() == 82198898843586560L) {
+            flagStr += " <:night:766617791817318410>";
+        }
+
+        if (member.isOwner()) {
+            flagStr += " <:ownercrown:810687537592139826>";
+        }
+
         var roles = "None";
 
-        if (! member.getRoles().isEmpty()) {
+        if (!member.getRoles()
+                .isEmpty()) {
             roles = member.getRoles()
                     .stream()
                     .map(Role::getAsMention)
@@ -105,41 +129,94 @@ public class UserInfo extends Command {
             perms = "Server Owner";
         } else if (member.hasPermission(Permission.ADMINISTRATOR)) {
             perms = "Administrator";
-        } else if (! permissions.isEmpty()) {
+        } else if (!permissions.isEmpty()) {
             perms = (permissions.stream()
                     .map(Permission::getName)
                     .collect(Collectors.joining(", ")));
         }
 
 
-        var secondsUserCreated = user.getTimeCreated().until(now, ChronoUnit.SECONDS);
-        var secondsMemberJoined = member.getTimeJoined().until(now, ChronoUnit.SECONDS);
+        var secondsUserCreated = user.getTimeCreated()
+                .until(now, ChronoUnit.SECONDS);
+        var secondsMemberJoined = member.getTimeJoined()
+                .until(now, ChronoUnit.SECONDS);
 
-        var ban = this.getBanInfo(user.getId());
+        var ban = this.getKsoftBanInfo(user.getId());
 
-        return EmbedUtil.createDefault()
+        var embedBuilder = EmbedUtil.createDefault()
                 .setAuthor(user.getAsTag(), null, user.getEffectiveAvatarUrl())
                 .setDescription(flagStr)
                 .addField("Mention (ID)", String.format("%s (%s)", user.getAsMention(), user.getId()), true)
-                .addField("Time Account Created", String.format("%s (%sago)", user.getTimeCreated().format(this.dtf), FormatUtil.secondsToTimeCompact(secondsUserCreated)), true)
-                .addField("Time Member Joined", String.format("%s (%sago)", member.getTimeJoined().format(this.dtf), FormatUtil.secondsToTimeCompact(secondsMemberJoined)), true)
+                .addField("Time Account Created", String.format("%s (%sago)", user.getTimeCreated()
+                        .format(this.dtf), FormatUtil.secondsToTimeCompact(secondsUserCreated)), true)
+                .addField("Time Member Joined", String.format("%s (%sago)", member.getTimeJoined()
+                        .format(this.dtf), FormatUtil.secondsToTimeCompact(secondsMemberJoined)), true)
                 .addField("Global Banned", """
                             Vortex: Soon:tm:
                             KSoft.Si: %s
-                        """.formatted(ban.exists() ? MarkdownUtil.maskedLink("Yes for %s".formatted(ban.getReason()), ban.getProof()) : "No"), true)
+                        """.formatted(ban.exists() ? MarkdownUtil.maskedLink("Yes for %s".formatted(ban.getReason()), ban
+                        .getProof()) : "No"), true)
 
                 .addField("Roles", roles, true)
                 .addBlankField(true)
-                .addField("Permissions", perms, false)
-                .build();
+                .addField("Permissions", perms, false);
+
+        Vortex.getLogger()
+                .debug("OnlineStatus == {}", member.getOnlineStatus());
+
+        if (member.getOnlineStatus() != OnlineStatus.OFFLINE || !activeOn.isEmpty() || !member.getActiveClients()
+                .isEmpty()) {
+            embedBuilder.addField("Active On", activeOn, true);
+        }
+
+
+        var activities = member.getActivities();
+
+        if (!activities.isEmpty()) {
+            embedBuilder.addField("Status", this.getActvityName(activities.get(0)), true);
+        }
+
+        return embedBuilder.build();
     }
 
 
-    protected Ban getBanInfo(String userId) {
+    protected Ban getKsoftBanInfo(String userId) {
 
         return Vortex.getKSoftAPI()
                 .getBan()
                 .setUserId(userId)
                 .execute();
+    }
+
+/*    protected GlobalBan getVortexBanInfo(String userId) {
+        return GlobalBanManager.
+    }*/
+
+    protected String getActvityName(Activity activity) {
+
+        var rp = activity.asRichPresence();
+
+        return switch (activity.getType()) {
+            case LISTENING -> "Listening to %s by %s".formatted(rp.getDetails(), rp.getState());
+            case WATCHING -> "Watching %s".formatted(activity.getName());
+            case STREAMING -> "Streaming %s".formatted(rp.getDetails());
+            case COMPETING -> "Competing in %s".formatted(activity.getName());
+            default -> activity.getName();
+        };
+
+
+
+/*        var type = activity.getType();
+
+        if (type == Activity.ActivityType.LISTENING) {
+            var rp = activity.asRichPresence();
+
+            return "Listening to %s by %s".formatted(rp.getDetails(), rp.getState());
+        } else if (type == )
+
+        return "%s %s".formatted(FormatUtil.capitlise(activity.getType()
+                .name()
+                .toLowerCase()
+                .replaceAll("_", "")), activity.getName());*/
     }
 }

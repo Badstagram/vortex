@@ -1,7 +1,9 @@
 package me.badstagram.vortex.commands.globalbans;
 
 import me.badstagram.vortex.commandhandler.Command;
+import me.badstagram.vortex.commandhandler.SubCommand;
 import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.SubCommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.managers.GlobalBanManager;
@@ -12,14 +14,14 @@ import java.util.UUID;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
-class GBanApprove extends Command {
+class GBanApprove extends SubCommand {
     public GBanApprove() {
         this.name = "approve";
         this.usage = "gban approve <report_id>";
     }
 
     @Override
-    public void execute(CommandContext ctx) throws CommandExecutionException, BadArgumentException {
+    public void execute(SubCommandContext ctx) throws CommandExecutionException, BadArgumentException {
         try {
             var args = ctx.getArgs().subList(1, ctx.getArgs().size());
 

@@ -1,14 +1,14 @@
 package me.badstagram.vortex.commands.globalbans;
 
-import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.SubCommand;
+import me.badstagram.vortex.commandhandler.context.SubCommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.managers.GlobalBanManager;
 
 import java.util.UUID;
 
-class GBanDeny extends Command {
+class GBanDeny extends SubCommand {
     public GBanDeny() {
         this.name = "deny";
         this.help = "Deny a global ban report";
@@ -16,7 +16,7 @@ class GBanDeny extends Command {
     }
 
     @Override
-    public void execute(CommandContext ctx) throws CommandExecutionException, BadArgumentException {
+    public void execute(SubCommandContext ctx) throws CommandExecutionException, BadArgumentException {
         var args = ctx.getArgs().subList(1, ctx.getArgs().size());
 
 

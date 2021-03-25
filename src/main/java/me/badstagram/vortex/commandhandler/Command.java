@@ -2,9 +2,8 @@ package me.badstagram.vortex.commandhandler;
 
 import me.badstagram.vortex.commandhandler.context.CommandContext;
 import me.badstagram.vortex.core.Constants;
-import me.badstagram.vortex.core.Vortex;
-import me.badstagram.vortex.events.CommandExecutedEvent;
 import me.badstagram.vortex.exceptions.BadArgumentException;
+import me.badstagram.vortex.exceptions.CantPunishException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.managers.CooldownManager;
 import me.badstagram.vortex.util.EmbedUtil;
@@ -12,6 +11,7 @@ import me.badstagram.vortex.util.ErrorHandler;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.utils.MarkdownUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +33,7 @@ public abstract class Command {
     protected Permission[] userPermissions = Permission.EMPTY_PERMISSIONS;
     protected Command[] subCommands = new Command[0];
 
-    public abstract void execute(CommandContext ctx) throws CommandExecutionException, BadArgumentException;
+    public abstract void execute(CommandContext ctx) throws CommandExecutionException, BadArgumentException, CantPunishException;
 
     protected final void run(CommandContext ctx) {
         var msg = ctx.getMessage();
@@ -44,14 +44,20 @@ public abstract class Command {
         // child check
 
         String[] parts = String.join(" ", Arrays.copyOf(
-                msg.getContentRaw().substring(ctx.getClient().getPrefix().length()).trim().split("\\s+", 2), 2))
+                msg.getContentRaw()
+                        .substring(ctx.getClient()
+                                .getPrefix()
+                                .length())
+                        .trim()
+                        .split("\\s+", 2), 2))
                 .split("\\s+");
 
 
         for (Command subCommand : subCommands) {
 
             if (parts[1].equals(subCommand.getName())) {
-                ctx.setArgs(String.join(" ", Arrays.asList(parts).subList(1, parts.length)));
+                ctx.setArgs(String.join(" ", Arrays.asList(parts)
+                        .subList(1, parts.length)));
                 subCommand.run(ctx);
                 return;
             }
@@ -66,7 +72,8 @@ public abstract class Command {
             return;
         }
 
-        Member self = msg.getGuild().getSelfMember();
+        Member self = msg.getGuild()
+                .getSelfMember();
 
         if (!self.hasPermission(this.botPermissions)) {
 
@@ -74,8 +81,10 @@ public abstract class Command {
                     .map(Permission::getName)
                     .collect(Collectors.joining());
 
-            ctx.getChannel().sendMessageFormat(":x: I don't have the right permissions for this command. I need %s",
-                    perms).queue();
+            ctx.getChannel()
+                    .sendMessageFormat(":x: I don't have the right permissions for this command. I need %s",
+                            perms)
+                    .queue();
             return;
         }
 
@@ -84,12 +93,15 @@ public abstract class Command {
                     .map(Permission::getName)
                     .collect(Collectors.joining());
 
-            ctx.getChannel().sendMessageFormat(":x: You don't have the right permissions for this command. You need %s",
-                    perms).queue();
+            ctx.getChannel()
+                    .sendMessageFormat(":x: You don't have the right permissions for this command. You need %s",
+                            perms)
+                    .queue();
             return;
         }
 
-        if (this.supportServerOnly && ctx.getGuild().getIdLong() != 705938001519181877L) {
+        if (this.supportServerOnly && ctx.getGuild()
+                .getIdLong() != 705938001519181877L) {
             ctx.getChannel()
                     .sendMessage(":x: This command can only be used in the support server.")
                     .queue();
@@ -97,19 +109,28 @@ public abstract class Command {
 
         }
 
-        if (!usr.getId().equals(ctx.getClient().getOwnerId()) && this.owner) {
-            ctx.getChannel().sendMessage(
-                    ":x: You don't have the right permissions for this command. You need Bot Owner").queue();
+        if (!usr.getId()
+                .equals(ctx.getClient()
+                        .getOwnerId()) && this.owner) {
+            ctx.getChannel()
+                    .sendMessage(
+                            ":x: You don't have the right permissions for this command. You need Bot Owner")
+                    .queue();
             return;
         }
 
 
-        if (this.nsfw && !ctx.getChannel().isNSFW()) {
-            ctx.getChannel().sendMessage("\uD83D\uDE0F This command can only be used in NSFW channels").queue(); // 😏
+        if (this.nsfw && !ctx.getChannel()
+                .isNSFW()) {
+            ctx.getChannel()
+                    .sendMessage("\uD83D\uDE0F This command can only be used in NSFW channels")
+                    .queue(); // 😏
             return;
 
         }
-        var cooldownMgr = new CooldownManager(ctx.getGuild().getId(), ctx.getAuthor().getId(), ctx.getEvent(), this);
+        var cooldownMgr = new CooldownManager(ctx.getGuild()
+                .getId(), ctx.getAuthor()
+                .getId(), ctx.getEvent(), this);
 
         if (cooldownMgr.isOnCooldown()) {
             var embed = EmbedUtil.createDefaultError()
@@ -150,17 +171,15 @@ public abstract class Command {
             }
 
 
-            this.getLogger().error("There was an error while running a command", e);
+            this.getLogger()
+                    .error("There was an error while running a command", e);
 
             ErrorHandler.handleCommandError(e, this, ctx);
 
             var embed = EmbedUtil.createDefaultError()
-
-                    .setTitle("There was an unexpected error while executing that command")
-                    .setDescription("If this error persists, report it in the [Support Server](%s)".formatted(
-                            Constants.SUPPORT_SERVER))
-                    .setFooter(
-                            "%s: %s".formatted(e.getCause().getClass().getCanonicalName(), e.getCause().getMessage()))
+                    .setTitle(ErrorHandler.getWittyErrorMessage())
+                    .setDescription(MarkdownUtil.monospace(e.getMessage()))
+                    .setFooter("%s | If this persists, report it in the support server %s".formatted(e.getCause().getClass().getSimpleName(), Constants.SUPPORT_SERVER))
                     .build();
 
             ctx.getChannel()
@@ -180,13 +199,23 @@ public abstract class Command {
             ctx.getChannel()
                     .sendMessage(embed)
                     .queue();
+        } catch (CantPunishException e) {
+            var embed = EmbedUtil.createDefaultError()
+                    .setTitle(":x: %#s can't be %sed".formatted(e.getMember(), e.getType()
+                            .getName()))
+                    .build();
+
+            ctx.getChannel()
+                    .sendMessage(embed)
+                    .queue();
         }
 
     }
 
     protected Logger getLogger() {
         return LoggerFactory.getLogger(
-                StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass());
+                StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE)
+                        .getCallerClass());
     }
 
     public String getName() {

@@ -21,6 +21,7 @@ public class Status extends Command {
         switch (args.get(0).toLowerCase()) {
             case "discord" -> new DiscordStatus().execute(ctx);
             case "hosting", "digitalocean" -> new HostingStatus().execute(ctx);
+            case "cloudflare" -> new CloudFlareStatus().execute(ctx);
             default -> throw new BadArgumentException("service", false);
         }
     }

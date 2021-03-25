@@ -142,7 +142,6 @@ public class GlobalBanManager {
             }
         }
         return null;
-
     }
 
 

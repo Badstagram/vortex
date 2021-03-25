@@ -1,7 +1,7 @@
 package me.badstagram.vortex.entities.builders;
 
 import me.badstagram.vortex.entities.GuildPunishment;
-import me.badstagram.vortex.entities.GuildPunishmentType;
+import me.badstagram.vortex.entities.enums.GuildPunishmentType;
 
 public class GuildPunishmentBuilder {
     private String userId;

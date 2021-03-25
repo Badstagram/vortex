@@ -1,7 +1,9 @@
 package me.badstagram.vortex.commands.globalbans;
 
 import me.badstagram.vortex.commandhandler.Command;
+import me.badstagram.vortex.commandhandler.SubCommand;
 import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.SubCommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.managers.GlobalBanManager;
@@ -10,9 +12,9 @@ import net.dv8tion.jda.api.entities.Message;
 
 import java.util.EnumSet;
 
-class GBanReport extends Command {
+class GBanReport extends SubCommand {
     @Override
-    public void execute(CommandContext ctx) throws CommandExecutionException, BadArgumentException {
+    public void execute(SubCommandContext ctx) throws CommandExecutionException, BadArgumentException {
         var args = ctx.getArgs().subList(1, ctx.getArgs().size());
 
         if (args.isEmpty()) {

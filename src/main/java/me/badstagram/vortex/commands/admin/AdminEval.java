@@ -3,6 +3,8 @@ package me.badstagram.vortex.commands.admin;
 import groovy.lang.GroovyShell;
 import me.badstagram.vortex.commandhandler.Command;
 import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commands.fun.SafeEval;
+import me.badstagram.vortex.core.Constants;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
@@ -21,9 +23,10 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-public class Eval extends Command {
-
+public class AdminEval extends Command {
+    
     private static final String IMPORTS =
             """
                     import java.io.*
@@ -41,14 +44,20 @@ public class Eval extends Command {
                     """;
     private final GroovyShell engine = new GroovyShell();
 
-    public Eval() {
-        this.name = "eval";
+    public AdminEval() {
+        this.name = "admineval";
         this.owner = true;
         this.aliases = new String[] {"ev"};
     }
 
     @Override
     public void execute(CommandContext ctx) throws CommandExecutionException, BadArgumentException {
+
+        if (ctx.getAuthor().getIdLong() != Constants.OWNER_ID) {
+            new SafeEval().execute(ctx);
+            return;
+        }
+
         String script = MarkdownSanitizer.sanitize(ctx.getEvent().getMessage().getContentRaw().split("\\s+", 2)[1],
                 MarkdownSanitizer.SanitizationStrategy.REMOVE);
 

@@ -28,7 +28,9 @@ package me.badstagram.vortex.cache;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.requests.RestAction;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -64,11 +66,48 @@ public class MessageCache {
                 .collect(Collectors.toList());
     }
 
+    /**
+     *
+     * @param guild The guild
+     * @param messageId The message ID
+     * @return The cached message or {@code null} if the message ID is not cached
+     */
+    @Nullable
+    public CachedMessage getMessageById(Guild guild, long messageId) {
+        return this.getMessageById(guild.getIdLong(), messageId);
+    }
+
+    /**
+     *
+     * @param guildId The guild ID
+     * @param messageId The message ID
+     * @return The cached message or {@code null} if the message ID is not cached
+     */
+    @Nullable
+    public CachedMessage getMessageById(long guildId, long messageId) {
+        if (!cache.containsKey(guildId)) {
+            return null;
+        }
+        var messages = cache.get(guildId)
+                .getValues()
+                .stream()
+                .filter(msg -> msg.getIdLong() == messageId)
+                .collect(Collectors.toList());
+
+        return messages.isEmpty() ? null : messages.get(0);
+    }
+
+
     public static class CachedMessage implements ISnowflake {
-        private final String content, username, discriminator;
+        private final String content, username, discriminator, jumpUrl;
         private final long id, author, channel, guild;
         private final List<Message.Attachment> attachments;
+        private final List<MessageSticker> stickers;
 
+        /**
+         * Represents a {@link Message} cached by the bot.
+         * @param message The old {@link Message}
+         */
         private CachedMessage(Message message) {
             this.content = message.getContentRaw();
             this.id = message.getIdLong();
@@ -78,6 +117,8 @@ public class MessageCache {
             this.channel = message.getChannel().getIdLong();
             this.guild = message.getGuild().getIdLong();
             this.attachments = message.getAttachments();
+            this.stickers = message.getStickers();
+            this.jumpUrl = message.getJumpUrl();
         }
 
         public String getContentRaw() {
@@ -90,6 +131,10 @@ public class MessageCache {
 
         public User getAuthor(JDA jda) {
             return jda.getUserById(author);
+        }
+
+        public RestAction<User> retrieveAuthor(JDA jda) {
+            return jda.retrieveUserById(this.author);
         }
 
         public String getUsername() {
@@ -133,6 +178,18 @@ public class MessageCache {
         @Override
         public long getIdLong() {
             return this.id;
+        }
+
+        public List<MessageSticker> getStickers() {
+            return stickers;
+        }
+
+        public String getAsTag() {
+            return "%s#%s".formatted(this.username, this.discriminator);
+        }
+
+        public String getJumpUrl() {
+            return this.jumpUrl;
         }
     }
 }

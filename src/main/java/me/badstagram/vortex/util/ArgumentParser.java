@@ -1,12 +1,15 @@
 package me.badstagram.vortex.util;
 
 import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.core.Vortex;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,8 +78,9 @@ public class ArgumentParser {
                     break;
                 default:
                     break;
-
             }
+
+
         }
 
         // hacky workaround to see if a user has nitro
@@ -90,6 +94,15 @@ public class ArgumentParser {
             sb.append(" <:bot_tag:762396082905940008>");
         }
 
+        var creationTime = user.getTimeCreated().toEpochSecond();
+        var timeInFuture = OffsetDateTime.now().plus(1, ChronoUnit.MONTHS).toEpochSecond();
+
+        Vortex.getLogger().debug("creationTime: {}", creationTime);
+        Vortex.getLogger().debug("timeInFuture: {}", timeInFuture);
+
+        if (creationTime > timeInFuture) {
+            sb.append("\uD83D\uDC76 "); // 👶
+        }
         return sb.toString();
     }
 
@@ -149,11 +162,10 @@ public class ArgumentParser {
 
 
             if (arg.matches("\\d+")) {
-                var member = this.guild.getMemberById(arg);
+                var member = this.guild.retrieveMemberById(arg).complete();
 
-                if (member != null) {
-                    members.add(member);
-                }
+                members.add(member);
+
             }
 
         }

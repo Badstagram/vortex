@@ -69,11 +69,10 @@ public class DatabaseUtils {
             if (rs != null) {
                 rs.close();
             }
-
         }
     }
 
-    public static void execute(@Nonnull @Language("PostgreSQL") String sql, Object... params) throws Exception {
+    public static void execute(@Nonnull String sql, Object... params) throws Exception {
 
         try (var con = getConnection(); var ps = con.prepareStatement(sql)) {
             var i = 1;
@@ -85,7 +84,6 @@ public class DatabaseUtils {
             ps.execute();
 
         }
-
     }
 }
 

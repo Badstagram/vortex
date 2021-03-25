@@ -2,6 +2,7 @@ package me.badstagram.vortex.commands.globalbans;
 
 import me.badstagram.vortex.commandhandler.Command;
 import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.SubCommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 
@@ -21,10 +22,10 @@ public class GBan extends Command {
             throw new BadArgumentException("action", true);
 
         switch (args.get(0)) {
-            case "report" -> new GBanReport().execute(ctx);
-            case "approve" -> new GBanApprove().execute(ctx);
-            case "deny" -> new GBanDeny().execute(ctx);
-            case "forceadd" -> new GBanForceAdd();
+            case "report" -> new GBanReport().execute(new SubCommandContext(ctx));
+            case "approve" -> new GBanApprove().execute(new SubCommandContext(ctx));
+            case "deny" -> new GBanDeny().execute(new SubCommandContext(ctx));
+            case "forceadd" -> new GBanForceAdd().execute(new SubCommandContext(ctx));
 
             default -> throw new BadArgumentException("action", false);
         }

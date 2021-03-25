@@ -1,17 +1,18 @@
 package me.badstagram.vortex.managers;
 
 import me.badstagram.vortex.entities.GuildPunishment;
-import me.badstagram.vortex.entities.GuildPunishmentType;
 import me.badstagram.vortex.entities.builders.GuildPunishmentBuilder;
+import me.badstagram.vortex.entities.enums.GuildPunishmentType;
 import me.badstagram.vortex.util.DatabaseUtils;
 import me.badstagram.vortex.util.ErrorHandler;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -24,30 +25,30 @@ public class GuildPunishmentManager {
         this.guildId = guildId;
     }
 
+    public GuildPunishmentManager(User user, Guild guild) {
+        this.userId = user.getId();
+        this.guildId = guild.getId();
+    }
+
+    public GuildPunishmentManager(Member member) {
+        this.userId = member.getId();
+        this.guildId = member.getGuild()
+                .getId();
+    }
+
     /**
      * Create a Guild Punishment
      *
-     * @param reason
-     *         The reason of the punishment
-     * @param type
-     *         The type of punishment
-     * @param modId
-     *         The ID of the moderator that issued the punishment
-     * @param perm
-     *         If the punishment is permanent
-     * @param length
-     *         The length of the punishment or {@code null} if the punishment is permanent
-     * @param unit
-     *         The unit of the length of punishment or {@code null} if the punishment is permanent
-     *
+     * @param reason The reason of the punishment
+     * @param type   The type of punishment
+     * @param modId  The ID of the moderator that issued the punishment
+     * @param perm   If the punishment is permanent
+     * @param length The length of the punishment or {@code null} if the punishment is permanent
+     * @param unit   The unit of the length of punishment or {@code null} if the punishment is permanent
      * @return The Case ID
-     *
-     * @throws Exception
-     *         If an {@link Exception} occurs
+     * @throws Exception If an {@link Exception} occurs
      */
-    public int createCase(String reason, GuildPunishmentType type, String modId, boolean perm, @Nullable String length,
-            @Nullable
-                    TimeUnit unit) {
+    public int createCase(String reason, GuildPunishmentType type, String modId, boolean perm, @Nullable String length, @Nullable TimeUnit unit) {
 
         ResultSet rs = null;
         try {
@@ -55,30 +56,16 @@ public class GuildPunishmentManager {
                 try (var con = DatabaseUtils.getConnection(); var ps = con.prepareStatement(
                         "INSERT INTO punishments (user_id, guild_id, mod_id, reason, type, expire_at) VALUES (?,?,?,?,?,?) RETURNING case_id")) {
 
-                    ps.setString(1, this.userId);
-                    ps.setString(2, this.guildId);
-                    ps.setString(3, modId);
-                    ps.setString(4, reason);
-                    ps.setString(5, type.getName());
+                    ps.setString(1, userId);
+                    ps.setString(2, guildId);
+                    ps.setString(3, reason);
+                    ps.setString(4, type.getName());
 
-                    if (!perm) {
-                        ps.setNull(6, Types.VARCHAR);
+                    if (perm) {
+                        ps.setNull(5, Types.NULL);
                     } else {
-                        var expire = OffsetDateTime.now()
-                                .plus(Long.parseLong(length), unit.toChronoUnit())
-                                .toInstant()
-                                .toEpochMilli();
-
-                        ps.setString(6, Long.toString(expire));
+//                        ps.setString(5, );
                     }
-
-                    rs = ps.executeQuery();
-
-                    if (rs.next()) {
-                        return rs.getInt("case_id");
-                    }
-
-
                 }
             } catch (SQLException e) {
                 ErrorHandler.handle(e);
@@ -95,16 +82,17 @@ public class GuildPunishmentManager {
         return -1;
     }
 
+    public int createCase(String reason, GuildPunishmentType type, User mod, boolean perm, @Nullable String length, @Nullable TimeUnit unit) {
+        return this.createCase(reason, type, mod.getId(), perm, length, unit);
+    }
+
+
     /**
      * Get a punishment by ID.
      *
-     * @param caseId
-     *         The case ID
-     *
+     * @param caseId The case ID
      * @return A {@link GuildPunishment} representing the given ID or {@code null} if no case found with the given ID
-     *
-     * @throws Exception
-     *         If an {@link Exception} occurs
+     * @throws Exception If an {@link Exception} occurs
      */
     @Nullable
     public GuildPunishment getCase(int caseId) throws Exception {
@@ -141,9 +129,7 @@ public class GuildPunishmentManager {
      * Get a users punishment.
      *
      * @return A {@link List<GuildPunishment>} representing the given users history
-     *
-     * @throws Exception
-     *         If an {@link Exception} occurs
+     * @throws Exception If an {@link Exception} occurs
      */
     public List<GuildPunishment> getHistory() throws Exception {
         ResultSet rs = null;

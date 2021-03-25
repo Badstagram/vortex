@@ -3,6 +3,11 @@ package me.badstagram.vortex.util;
 import net.dv8tion.jda.internal.utils.Checks;
 
 import javax.annotation.Nonnull;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class FormatUtil {
     /**
@@ -17,32 +22,38 @@ public class FormatUtil {
         StringBuilder builder = new StringBuilder();
         int years = (int) (timeSeconds / (60 * 60 * 24 * 365));
         if (years > 0) {
-            builder.append(years).append("y ");
+            builder.append(years)
+                    .append("y ");
             timeSeconds = timeSeconds % (60 * 60 * 24 * 365);
         }
         int weeks = (int) (timeSeconds / (60 * 60 * 24 * 7));
         if (weeks > 0) {
-            builder.append(weeks).append("w ");
+            builder.append(weeks)
+                    .append("w ");
 
             timeSeconds = timeSeconds % (60 * 60 * 24 * 7);
         }
         int days = (int) (timeSeconds / (60 * 60 * 24));
         if (days > 0) {
-            builder.append(days).append("d ");
+            builder.append(days)
+                    .append("d ");
             timeSeconds = timeSeconds % (60 * 60 * 24);
         }
         int hours = (int) (timeSeconds / (60 * 60));
         if (hours > 0) {
-            builder.append(hours).append("h ");
+            builder.append(hours)
+                    .append("h ");
             timeSeconds = timeSeconds % (60 * 60);
         }
         int minutes = (int) (timeSeconds / (60));
         if (minutes > 0) {
-            builder.append(minutes).append("m ");
+            builder.append(minutes)
+                    .append("m ");
             timeSeconds = timeSeconds % (60);
         }
         if (timeSeconds > 0)
-            builder.append(timeSeconds).append("s ");
+            builder.append(timeSeconds)
+                    .append("s ");
         String str = builder.toString();
         if (str.endsWith(", "))
             str = str.substring(0, str.length() - 2);
@@ -54,7 +65,7 @@ public class FormatUtil {
     public static String capitlise(@Nonnull String text) {
         Checks.notNull(text, "Text");
 
-        StringBuffer s = new StringBuffer();
+        StringBuilder s = new StringBuilder();
 
         // Declare a character of space
         // To identify that the next character is the starting
@@ -73,50 +84,58 @@ public class FormatUtil {
         }
 
         // Return the string with trimming
-        return s.toString().trim();
+        return s.toString()
+                .trim();
     }
 
     public static String secondsToTime(long timeSeconds) {
         StringBuilder builder = new StringBuilder();
         int years = (int) (timeSeconds / (60 * 60 * 24 * 365));
         if (years > 0) {
-            builder.append(years).append(" years ");
+            builder.append(years)
+                    .append(" years ");
             timeSeconds = timeSeconds % (60 * 60 * 24 * 365);
         }
 
         int months = (int) (timeSeconds / (60 * 60 * 24 * 30));
         if (months > 0) {
-            builder.append(months).append(" months ");
+            builder.append(months)
+                    .append(" months ");
             timeSeconds = timeSeconds % (60 * 60 * 24 * 30);
         }
 
         int weeks = (int) (timeSeconds / (60 * 60 * 24 * 7));
         if (weeks > 0) {
-            builder.append(weeks).append(" weeks ");
+            builder.append(weeks)
+                    .append(" weeks ");
 
             timeSeconds = timeSeconds % (60 * 60 * 24 * 7);
         }
 
         int days = (int) (timeSeconds / (60 * 60 * 24));
         if (days > 0) {
-            builder.append(days).append(" days ");
+            builder.append(days)
+                    .append(" days ");
             timeSeconds = timeSeconds % (60 * 60 * 24);
         }
 
         int hours = (int) (timeSeconds / (60 * 60));
         if (hours > 0) {
-            builder.append(hours).append(" hours ");
+            builder.append(hours)
+                    .append(" hours ");
             timeSeconds = timeSeconds % (60 * 60);
         }
 
         int minutes = (int) (timeSeconds / (60));
         if (minutes > 0) {
-            builder.append(minutes).append(" minutes ");
+            builder.append(minutes)
+                    .append(" minutes ");
             timeSeconds = timeSeconds % (60);
         }
 
         if (timeSeconds > 0)
-            builder.append(timeSeconds).append(" seconds");
+            builder.append(timeSeconds)
+                    .append(" seconds");
 
         String str = builder.toString();
         if (str.endsWith(", "))
@@ -126,4 +145,28 @@ public class FormatUtil {
             str = "No time";
         return str;
     }
+
+    public static String formatDate(Instant time) {
+        var dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
+                .withLocale(Locale.getDefault())
+                .withZone(ZoneId.systemDefault());
+
+        return dtf.format(time);
+    }
+
+    public static String formatDate(OffsetDateTime time) {
+        return formatDate(time.toInstant());
+    }
+
+    public static String formatDate(long epochMilis) {
+        return formatDate(Instant.ofEpochMilli(epochMilis));
+    }
+
+    public static String parseGuildFeature(String feature) {
+        return capitlise(feature.toLowerCase()
+                .replaceAll("_", " "));
+
+    }
+
+
 }

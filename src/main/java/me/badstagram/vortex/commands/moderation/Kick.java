@@ -3,7 +3,7 @@ package me.badstagram.vortex.commands.moderation;
 import me.badstagram.vortex.commandhandler.Command;
 import me.badstagram.vortex.commandhandler.context.CommandContext;
 import me.badstagram.vortex.core.Constants;
-import me.badstagram.vortex.entities.GuildPunishmentType;
+import me.badstagram.vortex.entities.enums.GuildPunishmentType;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.managers.GuildPunishmentManager;

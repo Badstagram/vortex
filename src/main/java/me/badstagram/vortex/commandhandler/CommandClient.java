@@ -113,5 +113,14 @@ public class CommandClient extends ListenerAdapter {
         return commandUsages;
     }
 
+    public void removeCommand(Command cmd) {
+        this.commands.remove(cmd.getName());
+    }
+
+    public void removeCommand(String name) {
+        this.commands.remove(name);
+    }
+
+
 
 }

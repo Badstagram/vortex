@@ -25,13 +25,13 @@ public class InviteLookup extends Command {
     public void execute(CommandContext ctx) throws CommandExecutionException, BadArgumentException {
 
         var args = ctx.getArgs();
+        var invites = ctx.getMessage().getInvites();
 
         if (args.isEmpty()) {
             throw new BadArgumentException("invite_code", true);
         }
 
         try {
-            var invites = ctx.getMessage().getInvites();
 
             var code = invites.isEmpty() ? args.get(0) : invites.get(0);
 
@@ -73,14 +73,13 @@ public class InviteLookup extends Command {
     protected MessageEmbed renderGuildEmbed(Invite.Guild guild, Invite.Channel channel, User creator) {
         var features = guild.getFeatures()
                 .stream()
-                .map(feature -> feature.replace("_", " "))
-                .map(String::toLowerCase)
-                .map(FormatUtil::capitlise)
+                .map(FormatUtil::parseGuildFeature)
                 .collect(Collectors.joining(", "));
 
 
         return EmbedUtil.createDefault()
-                .setAuthor("%s (%s)".formatted(guild.getName(), guild.getId()), guild.getIconUrl())
+                .setAuthor("%s (%s)".formatted(guild.getName(), guild.getId()))
+                .setThumbnail(guild.getIconUrl())
                 .addField("Channel", "%s (%s)".formatted(channel.getName(), channel.getId()), false)
                 .addField("Creator", "%s (%s)".formatted(creator == null ? "Unknown" : creator.getAsTag(), creator == null ? "Unknown" : creator.getId()), false)
                 .addField("Guild Creation Date", guild.getTimeCreated().format(DateTimeFormatter.ofPattern("dd:MM:yyyy HH:mm")), false)

@@ -1,14 +1,11 @@
 package me.badstagram.vortex.commands.config;
 
-import me.badstagram.vortex.automod.AutoModPunishmentType;
 import me.badstagram.vortex.commandhandler.Command;
 import me.badstagram.vortex.commandhandler.SubCommand;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
 import me.badstagram.vortex.commandhandler.context.SubCommandContext;
 import me.badstagram.vortex.commands.config.set.AntiInvite;
 import me.badstagram.vortex.commands.config.set.InviteAction;
 import me.badstagram.vortex.commands.info.Ping;
-import me.badstagram.vortex.entities.GuildPunishmentType;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.managers.GuildSettingsManager;

@@ -1,4 +1,4 @@
-package me.badstagram.vortex.entities;
+package me.badstagram.vortex.entities.enums;
 
 public enum GuildPunishmentType {
     TEMPMUTE("Temp Mute"),
@@ -7,7 +7,7 @@ public enum GuildPunishmentType {
     BAN("Ban"),
     SOFTBAN("Soft Ban"),
     KICK("Kick"),
-    WARN("Warn"),
+    STRIKE("Warn"),
     UNKNOWN("Unknown");
 
     private final String name;

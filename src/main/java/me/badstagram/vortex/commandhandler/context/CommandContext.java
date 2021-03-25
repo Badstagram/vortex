@@ -22,12 +22,9 @@ public class CommandContext implements ICommandContext {
 
 
     public CommandContext(GuildMessageReceivedEvent event, String args, CommandClient client) {
-
         this.event = event;
         this.args = args == null ? "" : args;
         this.client = client;
-
-        Vortex.getLogger().debug("this.args = {}", this.getArgs());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package me.badstagram.vortex.util;
 
+import io.grpc.netty.shaded.io.netty.handler.codec.socks.SocksRequestType;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.entities.enums.GuildPunishmentType;
 import me.badstagram.vortex.managers.GuildSettingsManager;
@@ -12,6 +13,7 @@ import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.URL;
@@ -71,8 +73,16 @@ public class MiscUtil {
 
         if (punishLogId == null)
             return;
+    }
 
 
+    public static String postToGithubGist(@Nonnull String text) throws IOException{
+        var client = Vortex.getHttpClient();
 
+        var req = new Request.Builder()
+                .url(new URL("https://api.github.com/gists"))
+                .addHeader("Accept", "application/vnd.github.v3+json");
+
+        return "null";
     }
 }
