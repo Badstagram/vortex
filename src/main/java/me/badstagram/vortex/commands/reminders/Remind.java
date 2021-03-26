@@ -47,10 +47,13 @@ public class Remind extends Command {
             Vortex.getScheduler()
                     .createScheduledTask(period.toStandardDuration(), () -> ctx.getChannel()
                             .sendMessageFormat("""
-                                    Hey %s,
-                                    You wanted me to remind you %s
+                                    \u23F0 Hey %s,
+                                    %s ago you wanted me to remind you %s
+                                                                        
+                                    Original Message: %s
                                     """, ctx.getAuthor()
-                                    .getAsMention(), reminder)
+                                    .getAsMention(), time, reminder, ctx.getMessage()
+                                    .getJumpUrl())
                             .queue());
         } catch (Exception e) {
             throw new CommandExecutionException(e);

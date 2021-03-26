@@ -27,7 +27,7 @@ public class UserInfo extends Command {
         this.help = "Get info about a snowflake";
         this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
 
-        this.dtf = DateTimeFormatter.ofPattern("dd:MM:yyyy HH:mm");
+        this.dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     }
 
     @Override
@@ -79,7 +79,7 @@ public class UserInfo extends Command {
                 .until(now, ChronoUnit.SECONDS);
 
         var ban = this.getKsoftBanInfo(user.getId());
-        return EmbedUtil.createDefault()
+        var embed =  EmbedUtil.createDefault()
                 .setAuthor(user.getAsTag(), null, user.getEffectiveAvatarUrl())
                 .setDescription(flagStr)
                 .addField("User ID", user.getId(), false)
@@ -89,8 +89,14 @@ public class UserInfo extends Command {
                             Vortex: Soon:tm:
                             KSoft.Si: %s
                         """.formatted(ban.exists() ? MarkdownUtil.maskedLink("Yes for %s".formatted(ban.getReason()), ban
-                        .getProof()) : "No"), true)
-                .build();
+                        .getProof()) : "No"), true);
+
+
+        if (user.isBot()) {
+            embed.addField("Invite Link", "https://discord.com/api/oauth2/authorize?client_id=%d&permissions=8&scope=bot".formatted(user.getIdLong()), false);
+        }
+
+        return embed.build();
     }
 
     protected MessageEmbed renderMemberEmbed(Member member) {
@@ -173,7 +179,11 @@ public class UserInfo extends Command {
         var activities = member.getActivities();
 
         if (!activities.isEmpty()) {
-            embedBuilder.addField("Status", this.getActvityName(activities.get(0)), true);
+            embedBuilder.addField("Status", this.getActivityName(activities.get(0)), true);
+        }
+
+        if (user.isBot()) {
+            embedBuilder.addField("Invite Link", "https://discord.com/api/oauth2/authorize?client_id=%d&permissions=8&scope=bot".formatted(user.getIdLong()), false);
         }
 
         return embedBuilder.build();
@@ -192,9 +202,12 @@ public class UserInfo extends Command {
         return GlobalBanManager.
     }*/
 
-    protected String getActvityName(Activity activity) {
+    protected String getActivityName(Activity activity) {
 
         var rp = activity.asRichPresence();
+
+        if (rp == null)
+            return activity.getName();
 
         return switch (activity.getType()) {
             case LISTENING -> "Listening to %s by %s".formatted(rp.getDetails(), rp.getState());
