@@ -9,17 +9,16 @@ import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.util.EmbedUtil;
 import me.badstagram.vortex.util.ErrorHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.EnumSet;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
-import java.net.URL;
 
 public class MessageListener extends ListenerAdapter {
 
@@ -34,21 +33,6 @@ public class MessageListener extends ListenerAdapter {
 
         if (author.isBot() || message.isWebhookMessage()) {
             return;
-        }
-
-        var rng = Vortex.getRandom();
-
-        if (rng.nextInt(5) == 1) {
-            message.getChannel()
-                    .sendMessage("DOODOO")
-                    .queue();
-        }
-
-        if (content.matches("volc(anicer)?")) {
-            message.delete()
-                    .flatMap(v -> message.getChannel()
-                            .sendMessage("furcanicer*"))
-                    .queue();
         }
 
 
@@ -159,15 +143,15 @@ public class MessageListener extends ListenerAdapter {
                     .queue();
         }
 
-        if (message.getAuthor()
-                .getIdLong() == 522506204346581013L && "DOODOO".equalsIgnoreCase(content)) {
-            message.getChannel()
-                    .sendMessage("DOODOO")
-                    .queue();
-        }
 
         if (content.matches("(?i)(jason)( citron)?")) {
-//            message.getChannel().sendFile("https://discord.ceo/man.png", "jason.jpg").queue();
+            try {
+                message.getChannel()
+                        .sendFile(new URL("https://discord.ceo/man.png").openStream(), "jason.jpg")
+                        .queue();
+            } catch (IOException e) {
+                ErrorHandler.handle(e);
+            }
         }
     }
 }
