@@ -1,7 +1,7 @@
 package me.badstagram.vortex.commandhandler;
 
-import me.badstagram.vortex.commandhandler.context.CommandContext;
-import me.badstagram.vortex.commandhandler.context.SubCommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.SubCommandContext;
 import me.badstagram.vortex.core.Constants;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;

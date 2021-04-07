@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.moderation;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.managers.GuildPunishmentManager;
@@ -16,6 +17,8 @@ public class History extends Command {
         this.name = "history";
         this.aliases = new String[] {"hist"};
         this.help = "Get the punishment history of yourself or another member";
+        this.category = new Category("Moderation");
+
     }
 
     @Override

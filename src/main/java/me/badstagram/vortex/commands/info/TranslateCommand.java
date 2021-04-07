@@ -1,11 +1,10 @@
 package me.badstagram.vortex.commands.info;
 
-import ch.qos.logback.classic.pattern.ClassOfCallerConverter;
-import com.google.auth.Credentials;
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.TranslateOptions;
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Config;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
@@ -18,6 +17,8 @@ public class TranslateCommand extends Command {
         this.help = "translate text";
         this.usage = "translate <language> <text>";
         this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
+        this.category = new Category("Info");
+
     }
 
     @Override

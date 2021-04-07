@@ -1,7 +1,7 @@
-package me.badstagram.vortex.commandhandler.context;
+package me.badstagram.vortex.commandhandler.context.impl;
 
 import me.badstagram.vortex.commandhandler.CommandClient;
-import me.badstagram.vortex.commandhandler.SubCommand;
+import me.badstagram.vortex.commandhandler.context.ISubCommandContext;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;

@@ -1,20 +1,22 @@
 package me.badstagram.vortex.commands.info;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.util.FormatUtil;
-import net.dv8tion.jda.api.events.ExceptionEvent;
 import org.joda.time.*;
 import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 public class HowLong extends Command {
     public HowLong() {
         this.name = "howlong";
         this.usage = "howlong <date>";
         this.help = "Get the amount of time until a date. Use dd/mm/yyyy";
+        this.category = new Category("Info");
+
+
     }
 
     @Override

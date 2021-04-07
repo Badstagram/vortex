@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.emote;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CantPunishException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
@@ -17,6 +18,8 @@ public class Create extends Command {
         this.help = "Create an emote";
         this.botPermissions = new Permission[]{Permission.MANAGE_EMOTES};
         this.userPermissions = new Permission[]{Permission.MANAGE_EMOTES};
+        this.category = new Category("Emote");
+
 
     }
 

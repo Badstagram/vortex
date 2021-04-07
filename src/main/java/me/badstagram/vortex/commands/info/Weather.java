@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.info;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Colors;
 import me.badstagram.vortex.core.Config;
 import me.badstagram.vortex.core.Vortex;
@@ -9,7 +10,6 @@ import me.badstagram.vortex.entities.enums.GBDefraIndex;
 import me.badstagram.vortex.entities.enums.USEPAIndex;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
-import me.badstagram.vortex.util.EmbedUtil;
 import me.badstagram.vortex.util.FormatUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -29,6 +29,8 @@ public class Weather extends Command {
         this.help = "Get the weather for a location";
         this.usage = "weather <location>";
         this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
+        this.category = new Category("Info");
+
     }
 
     @Override

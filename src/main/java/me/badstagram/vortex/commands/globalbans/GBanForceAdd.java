@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.globalbans;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.SubCommand;
-import me.badstagram.vortex.commandhandler.context.SubCommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.SubCommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.util.DatabaseUtils;
@@ -11,6 +12,11 @@ import java.time.Instant;
 import java.util.UUID;
 
 class GBanForceAdd extends SubCommand {
+
+    public GBanForceAdd() {
+        this.category = new Category("Global Ban");
+
+    }
 
     // user_id proof reason
     @Override

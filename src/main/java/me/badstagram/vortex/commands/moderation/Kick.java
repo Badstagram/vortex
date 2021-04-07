@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.moderation;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Constants;
 import me.badstagram.vortex.entities.enums.GuildPunishmentType;
 import me.badstagram.vortex.exceptions.BadArgumentException;
@@ -17,6 +18,8 @@ public class Kick extends Command {
         this.help = "Kick a member from the guild";
         this.botPermissions = new Permission[] {Permission.KICK_MEMBERS};
         this.userPermissions = new Permission[] {Permission.KICK_MEMBERS};
+        this.category = new Category("Moderation");
+
     }
 
     @Override

@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.moderation;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.util.ArgumentParser;
@@ -18,6 +19,8 @@ public class MassBan extends Command {
         this.usage = "massban <user...>' | '|<reason>";
         this.botPermissions = new Permission[]{Permission.BAN_MEMBERS};
         this.userPermissions = new Permission[]{Permission.BAN_MEMBERS};
+        this.category = new Category("Moderation");
+
     }
 
     @Override

@@ -1,12 +1,15 @@
 package me.badstagram.vortex.commands.morse;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.SubCommand;
-import me.badstagram.vortex.commandhandler.context.SubCommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.SubCommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 
 public class Encode extends SubCommand {
     public Encode() {
+        this.category = new Category("Morse");
+
     }
 
     @Override

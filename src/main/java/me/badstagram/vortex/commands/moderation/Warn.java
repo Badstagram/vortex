@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.moderation;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.entities.enums.GuildPunishmentType;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
@@ -15,6 +16,8 @@ public class Warn extends Command {
         this.help = "Warn a member";
         this.usage = "warn <member> <reason>";
         this.userPermissions = new Permission[] {Permission.NICKNAME_MANAGE};
+        this.category = new Category("Moderation");
+
     }
 
     @Override

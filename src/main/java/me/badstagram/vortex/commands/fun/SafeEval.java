@@ -1,11 +1,11 @@
 package me.badstagram.vortex.commands.fun;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.utils.MarkdownSanitizer;
 import net.dv8tion.jda.api.utils.data.DataObject;
 import okhttp3.MediaType;
@@ -21,6 +21,8 @@ public class SafeEval extends Command {
         this.help = "Safely evaluate code";
         this.usage = "safeeval <code>";
         this.aliases = new String[] { "sev" };
+        this.category = new Category("Fun");
+
     }
 
     @Override

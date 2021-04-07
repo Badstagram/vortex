@@ -1,7 +1,7 @@
 package me.badstagram.vortex.listeners;
 
 import me.badstagram.vortex.automod.AutoMod;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CantPunishException;
@@ -9,6 +9,7 @@ import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.util.EmbedUtil;
 import me.badstagram.vortex.util.ErrorHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -18,11 +19,14 @@ import java.util.EnumSet;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import java.net.URL;
+
 public class MessageListener extends ListenerAdapter {
 
 
     @Override
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+
         var author = event.getAuthor();
         var message = event.getMessage();
         var content = message.getContentRaw();
@@ -32,14 +36,23 @@ public class MessageListener extends ListenerAdapter {
             return;
         }
 
+        var rng = Vortex.getRandom();
+
+        if (rng.nextInt(5) == 1) {
+            message.getChannel()
+                    .sendMessage("DOODOO")
+                    .queue();
+        }
+
         if (content.matches("volc(anicer)?")) {
             message.delete()
-                    .flatMap(v -> message.getChannel().sendMessage("furcanicer*"))
+                    .flatMap(v -> message.getChannel()
+                            .sendMessage("furcanicer*"))
                     .queue();
         }
 
 
-        if (content.equalsIgnoreCase("\uD83C\uDFD3")) {
+        if ("\uD83C\uDFD3".equals(content)) {
             var client = Vortex.getCommandClient();
             var ctx = new CommandContext(event, "", client);
             var cmd = client.getCommand("ping");
@@ -49,6 +62,13 @@ public class MessageListener extends ListenerAdapter {
             } catch (CommandExecutionException | BadArgumentException | CantPunishException e) {
                 ErrorHandler.handleCommandError(e, cmd, ctx);
             }
+        }
+
+        if ("open the pod bay doors".equalsIgnoreCase(content)) {
+            message.getChannel()
+                    .sendMessageFormat("I'm sorry %s i'm afraid I can't do that.", message.getAuthor()
+                            .getName())
+                    .queue();
         }
 
         var autoMod = new AutoMod(message);
@@ -129,14 +149,26 @@ public class MessageListener extends ListenerAdapter {
             var members = message.getGuild()
                     .getMembers();
 
+            var random = Vortex.getRandom();
+
+            var member = members.get(random.nextInt(members.size()));
+
             message.getChannel()
-                    .sendMessage(members.get(Vortex.getRandom()
-                            .nextInt(members.size()))
-                            .getAsMention())
-                    .allowedMentions(EnumSet.noneOf(Message.MentionType.class))
+                    .sendMessage(member.getAsMention())
+                    .allowedMentions(EnumSet.of(Message.MentionType.USER))
                     .queue();
         }
 
+        if (message.getAuthor()
+                .getIdLong() == 522506204346581013L && "DOODOO".equalsIgnoreCase(content)) {
+            message.getChannel()
+                    .sendMessage("DOODOO")
+                    .queue();
+        }
+
+        if (content.matches("(?i)(jason)( citron)?")) {
+//            message.getChannel().sendFile("https://discord.ceo/man.png", "jason.jpg").queue();
+        }
     }
 }
 

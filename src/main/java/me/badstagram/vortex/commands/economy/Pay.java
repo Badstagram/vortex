@@ -1,15 +1,14 @@
 package me.badstagram.vortex.commands.economy;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.managers.EconomyManager;
 import me.badstagram.vortex.util.Checks;
 import me.badstagram.vortex.util.EmbedUtil;
 import net.dv8tion.jda.api.Permission;
-
-import java.sql.SQLException;
 
 
 public class Pay extends Command {
@@ -18,6 +17,8 @@ public class Pay extends Command {
         this.help = "Pay another member";
         this.usage = "pay <member> <amount>";
         this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
+        this.category = new Category("Economy");
+
     }
 
     @Override

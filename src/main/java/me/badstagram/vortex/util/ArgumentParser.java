@@ -1,6 +1,7 @@
 package me.badstagram.vortex.util;
 
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.ICommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Vortex;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
@@ -29,7 +30,7 @@ public class ArgumentParser {
         this.args = args;
     }
 
-    public ArgumentParser(CommandContext ctx) {
+    public ArgumentParser(ICommandContext ctx) {
         this.msg = ctx.getMessage();
         this.jda = ctx.getJDA();
         this.guild = ctx.getGuild();
@@ -94,11 +95,16 @@ public class ArgumentParser {
             sb.append(" <:bot_tag:762396082905940008>");
         }
 
-        var creationTime = user.getTimeCreated().toEpochSecond();
-        var timeInFuture = OffsetDateTime.now().plus(1, ChronoUnit.MONTHS).toEpochSecond();
+        var creationTime = user.getTimeCreated()
+                .toEpochSecond();
+        var timeInFuture = OffsetDateTime.now()
+                .plus(1, ChronoUnit.MONTHS)
+                .toEpochSecond();
 
-        Vortex.getLogger().debug("creationTime: {}", creationTime);
-        Vortex.getLogger().debug("timeInFuture: {}", timeInFuture);
+        Vortex.getLogger()
+                .debug("creationTime: {}", creationTime);
+        Vortex.getLogger()
+                .debug("timeInFuture: {}", timeInFuture);
 
         if (creationTime > timeInFuture) {
             sb.append("\uD83D\uDC76 "); // 👶
@@ -123,7 +129,8 @@ public class ArgumentParser {
             if (arg.matches("\\d+")) {
 
                 try {
-                    users.add(jda.retrieveUserById(arg).complete());
+                    users.add(jda.retrieveUserById(arg)
+                            .complete());
                 } catch (ErrorResponseException ignored) {
                 }
                 continue;
@@ -162,7 +169,8 @@ public class ArgumentParser {
 
 
             if (arg.matches("\\d+")) {
-                var member = this.guild.retrieveMemberById(arg).complete();
+                var member = this.guild.retrieveMemberById(arg)
+                        .complete();
 
                 members.add(member);
 
@@ -210,6 +218,4 @@ public class ArgumentParser {
 
         return channels;
     }
-
-
 }

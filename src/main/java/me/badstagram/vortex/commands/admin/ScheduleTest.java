@@ -1,20 +1,22 @@
 package me.badstagram.vortex.commands.admin;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CantPunishException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 
 import java.time.temporal.ChronoUnit;
-import java.util.concurrent.TimeUnit;
 
 public class ScheduleTest extends Command {
     public ScheduleTest() {
         this.name = "scheduletest";
         this.help = "Test the scheduler";
         this.owner = true;
+        this.category = new Category("Admin");
+
     }
 
     @Override

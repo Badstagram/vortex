@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.info;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Config;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.BadArgumentException;
@@ -15,10 +16,8 @@ import okhttp3.Request;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 public class Rep extends Command {
     public Rep() {
@@ -26,6 +25,8 @@ public class Rep extends Command {
         this.help = "Get the reputation of a user from Discordrep.com";
         this.usage = "rep [user]";
         this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
+        this.category = new Category("Info");
+
 
     }
 

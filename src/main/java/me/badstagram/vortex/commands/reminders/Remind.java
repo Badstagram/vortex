@@ -1,14 +1,19 @@
 package me.badstagram.vortex.commands.reminders;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
+import me.badstagram.vortex.util.DatabaseUtils;
 import me.badstagram.vortex.util.EmbedUtil;
 import me.badstagram.vortex.util.FormatUtil;
 import me.badstagram.vortex.util.MiscUtil;
 import net.dv8tion.jda.api.Permission;
+
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class Remind extends Command {
     public Remind() {
@@ -16,6 +21,9 @@ public class Remind extends Command {
         this.help = "Create a reminder";
         this.usage = "remind <time> <reminder>";
         this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
+        this.category = new Category("reminders");
+
+
     }
 
     @Override
@@ -34,10 +42,32 @@ public class Remind extends Command {
             var time = FormatUtil.secondsToTime(period.toStandardDuration()
                     .getStandardSeconds());
 
+
+            var now = OffsetDateTime.now();
+            var then = now.plus(period.toStandardDuration()
+                    .getMillis(), ChronoUnit.MILLIS);
+
+            var result = DatabaseUtils.executeQuery("INSERT INTO reminders (user_id, reminder, channel_id, guild_id, remind_at, jump_url) VALUES (?, ?, ?, ?, ?, ?) RETURNING reminder_id",
+                    ctx.getAuthor()
+                            .getId(),
+                    reminder,
+                    ctx.getChannel()
+                            .getId(),
+                    ctx.getGuild()
+                            .getId(),
+                    then.toInstant()
+                            .toEpochMilli(),
+                    ctx.getMessage()
+                            .getJumpUrl());
+
+            var reminderId = (int) result.get("reminder_id");
+
             var embed = EmbedUtil.createDefault()
                     .setTitle("Reminder")
                     .setDescription("I'll remind you in %s %s".formatted(time, reminder))
+                    .setFooter("Reminder ID " + reminderId)
                     .build();
+
 
             ctx.getChannel()
                     .sendMessage(embed)

@@ -20,11 +20,11 @@ import me.badstagram.vortex.commands.globalbans.GBan;
 import me.badstagram.vortex.commands.info.*;
 import me.badstagram.vortex.commands.moderation.*;
 import me.badstagram.vortex.commands.morse.Morse;
+import me.badstagram.vortex.commands.pride.*;
 import me.badstagram.vortex.commands.reminders.Remind;
 import me.badstagram.vortex.commands.status.Status;
 import me.badstagram.vortex.commands.tag.Tag;
 import me.badstagram.vortex.listeners.*;
-import me.badstagram.vortex.util.ErrorHandler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -40,7 +40,6 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Nonnull;
 import java.util.Random;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 
 public class Vortex {
     private static final boolean devMode = true;
@@ -54,6 +53,8 @@ public class Vortex {
     private static MongoClient mongo = null;
     private static CommandClient commandClient = null;
     private static Scheduler scheduler;
+
+    private static boolean ready = false;
 
 
     public static void main(String[] args) {
@@ -115,14 +116,33 @@ public class Vortex {
                     .addCommand(new ScheduleTest())
                     .addCommand(new TempBan())
                     .addCommand(new Remind())
+                    .addCommand(new Mosaic())
+                    .addCommand(new Jpeg())
+                    .addCommand(new Lego())
+                    .addCommand(new Thonkify())
+                    .addCommand(new Jumbo())
+
+                    .addCommand(new Gay())
+                    .addCommand(new BiSexual())
+                    .addCommand(new Trans())
+                    .addCommand(new Asexual())
+                    .addCommand(new Aromantic())
+                    .addCommand(new Pansexual())
+                    .addCommand(new Lesbian())
+                    .addCommand(new NonBinary())
+                    .addCommand(new GenderFluid())
+                    .addCommand(new GenderQueer())
+                    .addCommand(new PolySexual())
                     .build();
 
             jda.addEventListener(commandClient);
 
         } catch (Exception e) {
-            ErrorHandler.handle(e);
+/*            ErrorHandler.handle(e);
             log.error("There was an error and Vortex was unable to start up!", e);
-            System.exit(-1);
+            System.exit(-1);*/
+
+            e.printStackTrace();
         }
 
     }
@@ -148,12 +168,12 @@ public class Vortex {
                         new OnGuildUnavailable(),
                         new OnGuildAvailable(),
                         new OnUserAvatarUpdate(),
-                        new OnMessageDelete())
+                        new OnMessageDelete(),
+                        new OnShutdown())
                 .setBulkDeleteSplittingEnabled(false)
                 .setRawEventsEnabled(true)
                 .build()
                 .awaitReady();
-
     }
 
     public static boolean isDevMode() {
@@ -203,15 +223,18 @@ public class Vortex {
 
     public static RunMode getRunMode() {
         if (getJDA() == null) {
-            return RunMode.fromBase64(Config.get("token").split("\\.", 1)[0]);
+            return RunMode.fromBase64(Config.get("token")
+                    .split("\\.", 1)[0]);
         }
-        return RunMode.fromId(getJDA().getSelfUser().getId());
+        return RunMode.fromId(getJDA().getSelfUser()
+                .getId());
 
     }
 
     public static Logger getLogger() {
         return LoggerFactory.getLogger(
-                StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass());
+                StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE)
+                        .getCallerClass());
     }
 
     public static CommandClient getCommandClient() {
@@ -224,4 +247,15 @@ public class Vortex {
 
         return scheduler;
     }
+
+    public static boolean isReady() {
+        return ready;
+    }
+
+
+    public static void setReady(boolean ready) {
+        Vortex.ready = ready;
+    }
+
+
 }

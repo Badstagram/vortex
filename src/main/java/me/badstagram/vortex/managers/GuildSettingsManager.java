@@ -1,21 +1,13 @@
 package me.badstagram.vortex.managers;
 
-import com.github.benmanes.caffeine.cache.CacheLoader;
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
-import com.google.common.cache.CacheBuilder;
 import me.badstagram.vortex.automod.AutoModPunishmentType;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.util.DatabaseUtils;
 import me.badstagram.vortex.util.ErrorHandler;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Invite;
 import net.dv8tion.jda.internal.utils.Checks;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import javax.annotation.Nonnull;
-import java.util.concurrent.TimeUnit;
 
 public class GuildSettingsManager {
     private final String guildId;

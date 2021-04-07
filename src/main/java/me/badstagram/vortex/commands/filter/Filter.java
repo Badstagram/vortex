@@ -1,8 +1,9 @@
 package me.badstagram.vortex.commands.filter;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
-import me.badstagram.vortex.commandhandler.context.SubCommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.SubCommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import net.dv8tion.jda.api.Permission;
@@ -13,6 +14,8 @@ public class Filter extends Command {
         this.usage = "filter <add|remove> <word>";
         this.help = "Manage the word filter";
         this.userPermissions = new Permission[] { Permission.MANAGE_SERVER };
+        this.category = new Category("Filter");
+
     }
 
     @Override

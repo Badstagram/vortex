@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.info;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.util.ArgumentParser;
@@ -26,6 +27,8 @@ public class UserInfo extends Command {
         this.name = "info";
         this.help = "Get info about a snowflake";
         this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
+        this.category = new Category("Info");
+
 
         this.dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     }

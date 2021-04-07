@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.fun;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.duncte123.loadingbar.LoadingBar;
@@ -14,6 +15,8 @@ public class ProgressBar extends Command {
         this.name = "progress";
         this.help = "Displays a progress bar that shows how much of the year has passed";
         this.botPermissions = new Permission[] {Permission.MESSAGE_ATTACH_FILES};
+        this.category = new Category("Fun");
+
     }
 
     @Override
@@ -21,7 +24,9 @@ public class ProgressBar extends Command {
 
         try {
             var percent = LoadingBar.getPercentage();
-            var year = Calendar.getInstance().get(Calendar.YEAR);
+
+            var args = ctx.getArgs();
+            var year = args.isEmpty() ? Calendar.getInstance().get(Calendar.YEAR) : Integer.parseInt(args.get(0));
 
             ctx.getChannel()
                     .sendMessageFormat("**%s** is **%s**%% complete.", year, Math.round(percent))

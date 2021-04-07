@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.economy;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
@@ -19,6 +20,8 @@ public class Work extends Command {
         this.help = "Go to work";
         this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
         this.cooldown = Convert.toMinutes(30);
+        this.category = new Category("Economy");
+
     }
 
     @Override

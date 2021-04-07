@@ -1,8 +1,8 @@
-package me.badstagram.vortex.commandhandler.context;
+package me.badstagram.vortex.commandhandler.context.impl;
 
 import me.badstagram.vortex.commandhandler.CommandClient;
+import me.badstagram.vortex.commandhandler.context.ICommandContext;
 import me.badstagram.vortex.core.Constants;
-import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.entities.VortexMember;
 import me.badstagram.vortex.entities.impl.VortexMemberImpl;
 import me.badstagram.vortex.util.ArgumentParser;
@@ -113,6 +113,7 @@ public class CommandContext implements ICommandContext {
         return this.client;
     }
 
+    @Override
     public CommandContext setArgs(String args) {
         this.args = args;
         return this;

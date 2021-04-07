@@ -11,3 +11,4 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 target/.env
 /build-and-run.bat
+/src/main/java/me/badstagram/vortex/api/tokens.json

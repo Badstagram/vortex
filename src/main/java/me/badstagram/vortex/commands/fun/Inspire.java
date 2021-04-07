@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.fun;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
@@ -18,6 +19,8 @@ public class Inspire extends Command {
     public Inspire() {
         this.name = "inspire";
         this.help = "Get inspired";
+        this.category = new Category("Fun");
+
     }
 
     @Override
@@ -70,7 +73,7 @@ public class Inspire extends Command {
 
         try {
            return new URL(body.string());
-        } catch (MalformedURLException ignored) {
+        } catch (Exception ignored) {
             return null;
         }
     }

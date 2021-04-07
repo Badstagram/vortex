@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.status;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 
@@ -10,6 +11,8 @@ public class Status extends Command {
         this.name = "status";
         this.help = "Get the status of a service used by Vortex";
         this.usage = "status <discord|hosting|digitalocean>";
+        this.category = new Category("status");
+
     }
 
     @Override

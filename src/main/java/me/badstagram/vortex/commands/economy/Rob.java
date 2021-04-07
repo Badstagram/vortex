@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.economy;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
@@ -10,13 +11,13 @@ import me.badstagram.vortex.util.Convert;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.sql.SQLException;
-
 public class Rob extends Command {
     public Rob() {
         this.name = "rob";
         this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
         this.cooldown = Convert.toMinutes(30);
+        this.category = new Category("Economy");
+
     }
 
     @Override

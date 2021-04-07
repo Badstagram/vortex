@@ -5,8 +5,9 @@ import io.sentry.Scope;
 import io.sentry.Sentry;
 import io.sentry.protocol.User;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
-import me.badstagram.vortex.commandhandler.context.SubCommandContext;
+import me.badstagram.vortex.commandhandler.context.ICommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.SubCommandContext;
 import me.badstagram.vortex.core.RunMode;
 import me.badstagram.vortex.core.Vortex;
 import org.postgresql.util.PSQLException;
@@ -14,7 +15,7 @@ import org.postgresql.util.PSQLException;
 import java.util.List;
 
 public class ErrorHandler {
-    public static void handleCommandError(Throwable thr, Command cmd, CommandContext ctx) {
+    public static void handleCommandError(Throwable thr, Command cmd, ICommandContext ctx) {
         if (Vortex.getRunMode() == RunMode.DEVELOPMENT) {
             Vortex.getLogger()
                     .error(thr.getMessage(), thr);

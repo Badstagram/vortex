@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.moderation;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.managers.GuildPunishmentManager;
@@ -14,6 +15,8 @@ public class Case extends Command {
         this.help = "Get info about a punishment";
         this.usage = "case <case_id>";
         this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
+        this.category = new Category("Moderation");
+
     }
 
     @Override

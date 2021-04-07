@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.fun;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
@@ -17,6 +18,8 @@ public class Dog extends Command {
         this.aliases = new String[]{"floof"};
         this.help = "DOGOOOOOOOO";
         this.botPermissions = new Permission[]{Permission.MESSAGE_ATTACH_FILES};
+        this.category = new Category("Fun");
+
 
     }
 

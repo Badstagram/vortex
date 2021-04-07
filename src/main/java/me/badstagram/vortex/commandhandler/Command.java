@@ -1,6 +1,7 @@
 package me.badstagram.vortex.commandhandler;
 
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.ICommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Constants;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CantPunishException;
@@ -32,6 +33,7 @@ public abstract class Command {
     protected Permission[] botPermissions = Permission.EMPTY_PERMISSIONS;
     protected Permission[] userPermissions = Permission.EMPTY_PERMISSIONS;
     protected Command[] subCommands = new Command[0];
+    protected Category category = null;
 
     public abstract void execute(CommandContext ctx) throws CommandExecutionException, BadArgumentException, CantPunishException;
 
@@ -270,4 +272,7 @@ public abstract class Command {
     }
 
 
+    public Category getCategory() {
+        return this.category;
+    };
 }

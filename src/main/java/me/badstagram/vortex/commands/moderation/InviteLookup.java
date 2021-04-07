@@ -1,7 +1,9 @@
 package me.badstagram.vortex.commands.moderation;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
+import me.badstagram.vortex.entities.enums.GuildVerificationLevel;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.util.EmbedUtil;
@@ -19,6 +21,8 @@ public class InviteLookup extends Command {
         this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
         this.help = "Lookup a server by an invite code";
         this.usage = "lookup <invite_code>";
+        this.category = new Category("Moderation");
+
     }
 
     @Override
@@ -68,8 +72,9 @@ public class InviteLookup extends Command {
                 .addField("Creator", "%s (%s)".formatted(creator == null ? "Unknown" : creator.getAsTag(), creator == null ? "Unknown" : creator.getId()), false)
                 .addField("Guild Creation Date", guild.getTimeCreated()
                         .format(DateTimeFormatter.ofPattern("dd:MM:yyyy HH:mm")), false)
-                .addField("Verification Level", guild.getVerificationLevel()
-                        .name(), false)
+                .addField("Verification Level", GuildVerificationLevel.fromApiName(guild.getVerificationLevel()
+                        .name())
+                        .getHumanName(), false)
                 .addField("Features", features, false)
                 .addField("Members", String.valueOf(guild.getMemberCount()), true)
                 .addField("Of Which Online", String.valueOf(guild.getOnlineCount()), true)
@@ -80,7 +85,8 @@ public class InviteLookup extends Command {
 
         var users = group.getUsers();
         return EmbedUtil.createDefault()
-                .setAuthor(group.getName(), group.getIconUrl())
+                .setAuthor(group.getName())
+                .setThumbnail(group.getIconUrl())
                 .addField("Creator", "%s (%s)".formatted(creator == null ? "Unknown" : creator.getAsTag(), creator == null ? "Unknown" : creator.getId()), false)
                 .addField("Group Creation Date", group.getTimeCreated()
                         .format(DateTimeFormatter.ofPattern("dd:MM:yyyy HH:mm")), false)

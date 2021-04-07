@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.admin;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CantPunishException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
@@ -19,6 +20,8 @@ public class Load extends Command {
         this.help = "loads a command";
         this.usage = "load <command>";
         this.owner = true;
+        this.category = new Category("Admin");
+
     }
 
     @Override

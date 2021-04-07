@@ -33,6 +33,11 @@ public class CommandClientBuilder {
         if (this.commands.containsKey(name)) {
             throw new IllegalArgumentException(String.format("Command %s is already registered", name));
         }
+
+        if (cmd.getCategory() == null) {
+            throw new IllegalArgumentException("Command %s must have a Category".formatted(cmd.getName()));
+        }
+
         this.commands.put(name, cmd);
 
         for (var alias : cmd.aliases) {

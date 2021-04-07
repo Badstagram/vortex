@@ -1,10 +1,11 @@
 package me.badstagram.vortex.util;
 
-import io.grpc.netty.shaded.io.netty.handler.codec.socks.SocksRequestType;
+import me.badstagram.vortex.core.Config;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.entities.enums.GuildPunishmentType;
 import me.badstagram.vortex.managers.GuildSettingsManager;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.utils.data.DataArray;
 import net.dv8tion.jda.api.utils.data.DataObject;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -15,8 +16,12 @@ import org.joda.time.format.PeriodFormatterBuilder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 
 public class MiscUtil {
@@ -36,11 +41,14 @@ public class MiscUtil {
                 .post(RequestBody.create(MediaType.parse("text/plain"), text))
                 .build();
 
-        var response = client.newCall(request).execute();
+        var response = client.newCall(request)
+                .execute();
 
-        if (response.body() == null || !response.isSuccessful()) return "null";
+        var body = response.body();
 
-        var data = DataObject.fromJson(response.body().string());
+        if (body == null || !response.isSuccessful()) return "null";
+
+        var data = DataObject.fromJson(body.string());
 
         return BASE_URL + data.getString("key");
     }
@@ -55,12 +63,18 @@ public class MiscUtil {
     public static Period parseTimeString(String timeString) {
 
         PeriodFormatter formatter = new PeriodFormatterBuilder()
-                .appendYears().appendSuffix("y")
-                .appendMonths().appendSuffix("mo")
-                .appendDays().appendSuffix("d")
-                .appendHours().appendSuffix("h")
-                .appendMinutes().appendSuffix("m")
-                .appendSeconds().appendSuffix("s")
+                .appendYears()
+                .appendSuffix("y")
+                .appendMonths()
+                .appendSuffix("mo")
+                .appendDays()
+                .appendSuffix("d")
+                .appendHours()
+                .appendSuffix("h")
+                .appendMinutes()
+                .appendSuffix("m")
+                .appendSeconds()
+                .appendSuffix("s")
                 .toFormatter();
 
         return formatter.parsePeriod(timeString);
@@ -76,7 +90,7 @@ public class MiscUtil {
     }
 
 
-    public static String postToGithubGist(@Nonnull String text) throws IOException{
+    public static String postToGithubGist(@Nonnull String text) throws IOException {
         var client = Vortex.getHttpClient();
 
         var req = new Request.Builder()
@@ -85,4 +99,61 @@ public class MiscUtil {
 
         return "null";
     }
+
+    public static String readInputStream(@Nonnull InputStream stream) {
+        var sb = new StringBuilder();
+        var line = "";
+
+
+        try (var streamReader = new BufferedReader(new InputStreamReader(stream))) {
+            while ((line = streamReader.readLine()) != null) {
+                sb.append(line)
+                        .append("\n");
+            }
+        } catch (IOException e) {
+            ErrorHandler.handle(e);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * @param flag   The pride flag to overlay onto the avatar
+     * @param avatar The users avatar
+     * @return a {@link DataObject} containing the data from the api
+     */
+    public static byte[] getPrideFlag(@Nonnull String flag, @Nonnull String... avatar) {
+        try {
+
+            var requestBodyJson = DataObject.empty()
+                    .put("images", DataArray.empty()
+                            .addAll(Arrays.asList(avatar)))
+                    .put("opacity", 64)
+                    .toString();
+            var req = new Request.Builder()
+                    .url("https://api.pxlapi.dev/flag/" + flag)
+                    .addHeader("Authorization", "Application " + Config.get("pxlapi"))
+                    .post(RequestBody.create(MediaType.parse("application/json"), requestBodyJson))
+                    .build();
+
+
+            var res = Vortex.getHttpClient()
+                    .newCall(req)
+                    .execute();
+
+            var responseBody = res.body();
+
+            if (responseBody == null || !res.isSuccessful()) {
+                Vortex.getLogger()
+                        .error("pxlapi returned unknown error: {}", res.code());
+                return new byte[0];
+            }
+
+            return responseBody.bytes();
+        } catch (Exception e) {
+            ErrorHandler.handle(e);
+        }
+
+        return new byte[0];
+    }
+
 }

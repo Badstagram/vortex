@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.fun;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Colors;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.BadArgumentException;
@@ -14,6 +15,8 @@ public class Rule34 extends Command {
         this.name = "rule34";
         this.aliases = new String[]{"r34"};
         this.nsfw = true;
+        this.category = new Category("Fun");
+
     }
 
     @Override

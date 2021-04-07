@@ -21,8 +21,5 @@
     </root>
 
 
-    <logger name="org.postgresql.util.PSQLException" level="OFF"/>
-    <logger name="java.net.ConnectException" level="OFF"/>
-
 
 </configuration>

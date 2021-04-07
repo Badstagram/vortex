@@ -1,9 +1,9 @@
 package me.badstagram.vortex.commands.morse;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.SubCommand;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
-import me.badstagram.vortex.commandhandler.context.SubCommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.SubCommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 
@@ -12,6 +12,8 @@ public class Morse extends Command {
         this.name = "morse";
         this.usage = "morse <encode|decode> <input>";
         this.subCommands = new Command[]{new Encode()};
+        this.category = new Category("Moderation");
+
     }
 
     @Override

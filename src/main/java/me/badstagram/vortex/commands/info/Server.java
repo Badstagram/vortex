@@ -1,25 +1,25 @@
 package me.badstagram.vortex.commands.info;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
-import me.badstagram.vortex.core.Emotes;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.util.EmbedUtil;
+import me.badstagram.vortex.util.FormatUtil;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-
-import java.util.stream.Collectors;
 
 public class Server extends Command {
     public Server() {
         this.name = "server";
         this.help = "Get info about the server";
         this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
+        this.category = new Category("Info");
+
 
     }
 
@@ -70,8 +70,7 @@ public class Server extends Command {
                                                         
                                                         
                             """.formatted(onlineMembers, idleMembers, dndMembers, offlineMembers, bots, humans), true)
-                    .addField("Features", this.parseFeatures(guild)
-                            .isEmpty() ? "None" : this.parseFeatures(guild), false)
+                    .addField("Features", FormatUtil.parseGuildFeatures(guild), false)
                     .addField("Assets", this.getAssets(guild), false)
                     .build();
 
@@ -102,48 +101,6 @@ public class Server extends Command {
 
 
         return assets;
-    }
-
-    protected String parseFeatures(Guild guild) {
-        var features = guild.getFeatures();
-        return """
-                %s `Animated Icon`
-                %s `Commerce`
-                %s `Discoverable`
-                %s `Member Verification Gate Enabled`
-                %s `Partnered`
-                %s `Vanity Url`
-                %s `Banner`
-                %s `Community`
-                %s `Invite Splash`
-                %s `News`
-                %s `Preview`
-                %s `Verified`
-                %s `Welcome Screen Enabled`
-                """.formatted(
-                features.contains("ANIMATED_ICON") ? Emotes.EMOTE_SWITCH_ENABLED : Emotes.EMOTE_SWITCH_DISABLED,
-                features.contains("COMMERCE") ? Emotes.EMOTE_SWITCH_ENABLED : Emotes.EMOTE_SWITCH_DISABLED,
-                features.contains("DISCOVERABLE") ? Emotes.EMOTE_SWITCH_ENABLED : Emotes.EMOTE_SWITCH_DISABLED,
-                features.contains("MEMBER_VERIFICATION_GATE_ENABLED") ? Emotes.EMOTE_SWITCH_ENABLED : Emotes.EMOTE_SWITCH_DISABLED,
-                features.contains("PARTNERED") ? Emotes.EMOTE_SWITCH_ENABLED : Emotes.EMOTE_SWITCH_DISABLED,
-                features.contains("VANITY_URL") ? Emotes.EMOTE_SWITCH_ENABLED : Emotes.EMOTE_SWITCH_DISABLED,
-                features.contains("BANNER") ? Emotes.EMOTE_SWITCH_ENABLED : Emotes.EMOTE_SWITCH_DISABLED,
-                features.contains("COMMUNITY") ? Emotes.EMOTE_SWITCH_ENABLED : Emotes.EMOTE_SWITCH_DISABLED,
-                features.contains("INVITE_SPLASH") ? Emotes.EMOTE_SWITCH_ENABLED : Emotes.EMOTE_SWITCH_DISABLED,
-                features.contains("NEWS") ? Emotes.EMOTE_SWITCH_ENABLED : Emotes.EMOTE_SWITCH_DISABLED,
-                features.contains("PREVIEW") ? Emotes.EMOTE_SWITCH_ENABLED : Emotes.EMOTE_SWITCH_DISABLED,
-                features.contains("VERIFIED") ? Emotes.EMOTE_SWITCH_ENABLED : Emotes.EMOTE_SWITCH_DISABLED,
-                features.contains("WELCOME_SCREEN_ENABLED") ? Emotes.EMOTE_SWITCH_ENABLED : Emotes.EMOTE_SWITCH_DISABLED
-        );
-
-
-    }
-
-    protected String getEmotes(Guild guild) {
-        return guild.getEmotes()
-                .stream()
-                .map(Emote::getAsMention)
-                .collect(Collectors.joining());
     }
 
 }

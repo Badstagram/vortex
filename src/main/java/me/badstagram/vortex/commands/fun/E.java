@@ -1,17 +1,19 @@
 package me.badstagram.vortex.commands.fun;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class E extends Command {
     public E() {
         this.name = "e";
         this.help = "sometimes you just gotta E";
+        this.category = new Category("Fun");
+
     }
 
     @Override

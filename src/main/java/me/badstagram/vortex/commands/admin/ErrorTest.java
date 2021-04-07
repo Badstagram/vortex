@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.admin;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import net.dv8tion.jda.api.entities.User;
@@ -12,6 +13,8 @@ public class ErrorTest extends Command {
         this.help = "Test the error handler";
         this.owner = true;
         this.usage = "-errorhandler";
+        this.category = new Category("Admin");
+
     }
 
     @Override

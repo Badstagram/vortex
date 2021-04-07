@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.emote;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.util.EmbedUtil;
@@ -9,13 +10,9 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.requests.RestAction;
-import okhttp3.OkHttpClient;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class Steal extends Command {
@@ -25,6 +22,8 @@ public class Steal extends Command {
         this.usage = "steal <emote1> [emote2]...";
         this.botPermissions = new Permission[]{Permission.MANAGE_EMOTES};
         this.userPermissions = new Permission[]{Permission.MANAGE_EMOTES};
+        this.category = new Category("Emote");
+
     }
 
     @Override
@@ -38,6 +37,10 @@ public class Steal extends Command {
 
 
             var restActions = new ArrayList<RestAction<Emote>>();
+
+            var managed = emotes.stream()
+                    .filter(Emote::isManaged)
+                    .count();
 
             var emotesToSteal = emotes.stream()
                     .filter(em -> !em.isManaged()) // Prevent stealing Twitch Sub emotes
@@ -56,11 +59,14 @@ public class Steal extends Command {
 
                         var embed = EmbedUtil.createDefault()
                                 .setTitle("%d Emote%s Stolen".formatted(emotesAdded.size(), emotesAdded.size() == 1 ? "" : "s"))
-                                .addField("Emote%s Stolen".formatted(emotesAdded.size() == 1 ? "" : "s"), emoteMentions, false)
-                                .build();
+                                .addField("Emote%s Stolen".formatted(emotesAdded.size() == 1 ? "" : "s"), emoteMentions, false);
+
+                        if (managed > 0) {
+                            embed.addField("Managed emotes that can't be stolen", String.valueOf(managed), true);
+                        }
 
                         ctx.getChannel()
-                                .sendMessage(embed)
+                                .sendMessage(embed.build())
                                 .queue();
                     });
         } catch (Exception e) {

@@ -1,13 +1,17 @@
 package me.badstagram.vortex.commands.filter;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.SubCommand;
-import me.badstagram.vortex.commandhandler.context.SubCommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.SubCommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.util.DatabaseUtils;
-import org.conscrypt.ct.CTConstants;
 
 public class FilterAdd extends SubCommand {
+    public FilterAdd() {
+        this.category = new Category("Filter");
+    }
+
     @Override
     public void execute(SubCommandContext ctx) throws BadArgumentException, CommandExecutionException {
         var args = ctx.getArgs();

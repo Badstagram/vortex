@@ -1,9 +1,8 @@
 package me.badstagram.vortex.commands.info;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
-import me.badstagram.vortex.exceptions.BadArgumentException;
-import me.badstagram.vortex.exceptions.CantPunishException;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
@@ -11,6 +10,11 @@ import net.dv8tion.jda.api.entities.User;
 import java.util.stream.Collectors;
 
 public class BadgeCount extends Command {
+    public BadgeCount() {
+        this.category = new Category("Info");
+
+    }
+
     @Override
     public void execute(CommandContext ctx) throws CommandExecutionException {
         try {

@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.moderation;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.entities.enums.GuildPunishmentType;
 import me.badstagram.vortex.exceptions.BadArgumentException;
@@ -22,6 +23,8 @@ public class TempBan extends Command {
         this.usage = "tempban <member> <time> <reason>";
         this.botPermissions = new Permission[]{Permission.BAN_MEMBERS};
         this.userPermissions = new Permission[]{Permission.BAN_MEMBERS};
+        this.category = new Category("Moderation");
+
     }
 
     @Override

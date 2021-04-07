@@ -1,6 +1,7 @@
 package me.badstagram.vortex.commandhandler.context;
 
 import me.badstagram.vortex.commandhandler.CommandClient;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.entities.VortexMember;
 import me.badstagram.vortex.util.ArgumentParser;
 import net.dv8tion.jda.api.JDA;
@@ -37,6 +38,8 @@ public interface ICommandContext {
     void replyPinging(String msg);
 
     CommandClient getClient();
+
+    default ICommandContext setArgs(String args) {return this;}
 
     ArgumentParser createArgumentParser();
 

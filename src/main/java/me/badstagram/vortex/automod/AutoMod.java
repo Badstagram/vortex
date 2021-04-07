@@ -6,6 +6,7 @@ import me.badstagram.vortex.managers.GuildPunishmentManager;
 import me.badstagram.vortex.managers.GuildSettingsManager;
 import me.badstagram.vortex.util.Checks;
 import me.badstagram.vortex.util.EmbedUtil;
+import me.badstagram.vortex.util.MiscUtil;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Invite;
@@ -105,19 +106,9 @@ public class AutoMod {
             return;
         }
 
+        var wordList = MiscUtil.readInputStream(wordStream);
 
-        var sb = new StringBuilder();
-        var line = "";
-
-
-        try (var streamReader = new BufferedReader(new InputStreamReader(wordStream))) {
-            while ((line = streamReader.readLine()) != null) {
-                sb.append(line).append("\n");
-            }
-        }
-
-        var bannedWords = Arrays.asList(sb.toString()
-                .split("\\s+"));
+        var bannedWords = Arrays.asList(wordList.split("\\s+"));
         
 
         if (!this.msg.getGuild()

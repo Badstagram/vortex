@@ -1,10 +1,10 @@
 package me.badstagram.vortex.commands.moderation;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.BadArgumentException;
-import me.badstagram.vortex.exceptions.CantPunishException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ChannelType;
@@ -20,6 +20,8 @@ public class CategorySync extends Command {
         this.help = "Sync every channel with in the current channels category with the permissions of the category";
         this.botPermissions = new Permission[]{Permission.MANAGE_CHANNEL, Permission.MESSAGE_EMBED_LINKS};
         this.userPermissions = new Permission[]{Permission.MANAGE_CHANNEL};
+        this.category = new Category("Moderation");
+
     }
 
     @Override

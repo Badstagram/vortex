@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.tag;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.managers.TagManager;
@@ -12,7 +13,7 @@ public class Tag extends Command {
         this.name = "tag";
         this.aliases = new String[]{"t"};
         this.subCommands = new Command[]{new TagCreate()};
-
+        this.category = new Category("Tag");
     }
 
     @Override

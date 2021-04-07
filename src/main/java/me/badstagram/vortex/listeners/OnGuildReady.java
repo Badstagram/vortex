@@ -11,18 +11,10 @@ public class OnGuildReady extends ListenerAdapter {
     @Override
     public void onGuildReady(@NotNull GuildReadyEvent event) {
         var guild = event.getGuild();
-        var guildCount = event.getJDA().getGuilds().size();
-
-        var readyGuilds = 0;
 
         Vortex.getLogger()
                 .info("Guild {} ({}) has become ready!", guild.getName(), guild.getId());
 
-        readyGuilds++;
 
-        if (readyGuilds == guildCount) {
-            Vortex.getLogger()
-                    .info("All guilds are ready.");
-        }
     }
 }

@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.economy;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
@@ -14,6 +15,8 @@ public class Daily extends Command {
         this.name = "daily";
         this.help = "Claim your daily reward";
         this.cooldown = Convert.toDays(1);
+        this.category = new Category("Economy");
+
     }
 
 

@@ -1,9 +1,8 @@
 package me.badstagram.vortex.commands.globalbans;
 
-import me.badstagram.vortex.commandhandler.Command;
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.SubCommand;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
-import me.badstagram.vortex.commandhandler.context.SubCommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.SubCommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.managers.GlobalBanManager;
@@ -18,6 +17,9 @@ class GBanApprove extends SubCommand {
     public GBanApprove() {
         this.name = "approve";
         this.usage = "gban approve <report_id>";
+        this.category = new Category("Fun");
+        this.category = new Category("Global Ban");
+
     }
 
     @Override

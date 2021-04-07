@@ -1,7 +1,9 @@
 package me.badstagram.vortex.commands.info;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
+import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.util.EmbedUtil;
 import net.dv8tion.jda.api.Permission;
@@ -9,11 +11,17 @@ import net.dv8tion.jda.api.utils.MarkdownUtil;
 
 
 public class Ping extends Command {
+
+
     public Ping() {
         this.name = "ping";
         this.help = "Get the ping to discord";
         this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
         this.aliases = new String[] { "\uD83C\uDFD3" };
+        this.category = new Category("Info");
+
+
+
     }
 
     @Override

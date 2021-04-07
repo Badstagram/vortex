@@ -1,8 +1,9 @@
 package me.badstagram.vortex.commands.config;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
 import me.badstagram.vortex.commandhandler.SubCommand;
-import me.badstagram.vortex.commandhandler.context.SubCommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.SubCommandContext;
 import me.badstagram.vortex.commands.config.set.AntiInvite;
 import me.badstagram.vortex.commands.config.set.InviteAction;
 import me.badstagram.vortex.commands.info.Ping;
@@ -23,6 +24,8 @@ public class Set extends SubCommand {
         this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
         this.userPermissions = new Permission[] {Permission.MANAGE_SERVER};
         this.subCommands = new Command[] {new Ping()};
+        this.category = new Category("Config");
+
     }
 
     @Override

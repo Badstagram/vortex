@@ -1,15 +1,13 @@
 package me.badstagram.vortex.commands.fun;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CantPunishException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
 import me.badstagram.vortex.util.ASCIIArtGenerator;
 import net.dv8tion.jda.api.utils.MarkdownUtil;
-
-import java.util.Arrays;
-import java.util.concurrent.ExecutionException;
 
 public class AsciiArt extends Command {
     public AsciiArt() {
@@ -17,6 +15,8 @@ public class AsciiArt extends Command {
         this.aliases = new String[]{"ascii", "art"};
         this.help = "Generate ASCII art.";
         this.usage = "asciiart <character> <text>";
+        this.category = new Category("Fun");
+
     }
 
     @Override

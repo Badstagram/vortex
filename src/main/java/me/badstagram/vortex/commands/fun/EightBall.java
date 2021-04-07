@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.fun;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Colors;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.BadArgumentException;
@@ -15,6 +16,8 @@ public class EightBall extends Command {
         this.name = "8ball";
         this.help = "Ask the magic 8 ball a question";
         this.usage = "8ball <question>";
+        this.category = new Category("Fun");
+
     }
 
     @Override

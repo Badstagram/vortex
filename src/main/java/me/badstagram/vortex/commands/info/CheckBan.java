@@ -1,7 +1,8 @@
 package me.badstagram.vortex.commands.info;
 
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.core.Vortex;
 import me.badstagram.vortex.exceptions.BadArgumentException;
 import me.badstagram.vortex.exceptions.CommandExecutionException;
@@ -14,6 +15,8 @@ public class CheckBan extends Command {
         this.help = "Check if a user is global banned on KSoft.Si.";
         this.usage = "checkban <user>";
         this.botPermissions = new Permission[] { Permission.MESSAGE_EMBED_LINKS };
+        this.category = new Category("Info");
+
     }
 
     @Override

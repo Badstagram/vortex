@@ -1,8 +1,9 @@
 package me.badstagram.vortex.commands.admin;
 
 import groovy.lang.GroovyShell;
+import me.badstagram.vortex.commandhandler.Category;
 import me.badstagram.vortex.commandhandler.Command;
-import me.badstagram.vortex.commandhandler.context.CommandContext;
+import me.badstagram.vortex.commandhandler.context.impl.CommandContext;
 import me.badstagram.vortex.commands.fun.SafeEval;
 import me.badstagram.vortex.core.Constants;
 import me.badstagram.vortex.core.Vortex;
@@ -14,16 +15,9 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.utils.MarkdownSanitizer;
 import net.dv8tion.jda.api.utils.MarkdownUtil;
-import net.dv8tion.jda.api.utils.data.DataObject;
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 
 import java.awt.*;
-import java.io.IOException;
-import java.net.URL;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class AdminEval extends Command {
     
@@ -48,6 +42,7 @@ public class AdminEval extends Command {
         this.name = "admineval";
         this.owner = true;
         this.aliases = new String[] {"ev"};
+        this.category = new Category("Admin");
     }
 
     @Override
